@@ -24,7 +24,6 @@ void displayAnalogReadings(int lightSensor1, int lightSensor2);
 
 int dealingWithTouchSensor;
 
-
 int main() {
     int leftMotor = 0;
     int rightMotor = 3;
@@ -225,8 +224,8 @@ void randomSeekLight(int leftMotor, int rightMotor, int leftLightSensor, int rig
 
 void metaSensing() {
     // create threads
-    lightThread = thread_create(senseLight);
-    touchThread = thread_create(feelObjects);
+    thread lightThread = thread_create(senseLight);
+    thread touchThread = thread_create(feelObjects);
 
     // start threads
     thread_start(lightThread);
@@ -269,6 +268,8 @@ void feelObjects() {
     int rightTouchSensor = 1;
     int leftTouchSensorReading = 0;
     int rightTouchSensorReading = 0;
+    int touchCount = 0;
+    int randomThreshhold = 3;
 
     while(1) {
         // Get sensor readings
@@ -277,25 +278,36 @@ void feelObjects() {
 
         if(leftTouchSensorReading) {
           dealingWithTouchSensor = 1;
-          // Back up
-          goStraightMav(leftMotor, rightMotor, 1000, -500);
-          // Turn Right 90
-          turnRight(leftMotor, rightMotor);
-          // Go straight
-          goStraightMav(leftMotor, rightMotor, 500, 500);
-          // Turn left
-          turnLeft(leftMotor, rightMotor);
+
+          if(touchCount > randomThreshhold) {
+            getOutOfJar();
+            touchCount = 0;
+          } else {
+            // Back up
+            goStraightMav(leftMotor, rightMotor, 1000, -500);
+            // Turn Right 90
+            turnRight(leftMotor, rightMotor);
+            // Go straight
+            goStraightMav(leftMotor, rightMotor, 500, 500);
+            // Turn left
+            turnLeft(leftMotor, rightMotor);
+          }
           dealingWithTouchSensor = 0;
         } else if (rightTouchSensorReading) {
           dealingWithTouchSensor = 1;
-          // Back up
-          goStraightMav(leftMotor, rightMotor, 1000, -500);
-          // Turn left 90
-          turnLeft(leftMotor, rightMotor);
-          // Go straight
-          goStraightMav(leftMotor, rightMotor, 500, 500);
-          // Back up
-          turnRight(leftMotor, rightMotor);
+          if(touchCount > randomThreshhold) {
+            getOutOfJar();
+            touchCount = 0;
+          } else {
+            // Back up
+            goStraightMav(leftMotor, rightMotor, 1000, -500);
+            // Turn left 90
+            turnLeft(leftMotor, rightMotor);
+            // Go straight
+            goStraightMav(leftMotor, rightMotor, 500, 500);
+            // Back up
+            turnRight(leftMotor, rightMotor);
+          }
           dealingWithTouchSensor = 0;
         }
     }
