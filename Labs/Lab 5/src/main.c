@@ -75,6 +75,7 @@ void primitiveWallFollow() {
 
         data[ix++ % DATA_ARRAY_SIZE] = wall;
 
+        // 10 data points a second.
         msleep(100L);
     }
     ao();
@@ -98,6 +99,7 @@ void primitiveGentleWallFollow() {
 
         data[ix++ % DATA_ARRAY_SIZE] = wall;
 
+        // 10 data points a second.
         msleep(100L);
     }
     ao();
@@ -138,6 +140,7 @@ void proportionalController(float proportionalGain) {
 
       data[ix++ % DATA_ARRAY_SIZE] = wall;
 
+      // 10 data points a second.
       msleep(100L);
   }
   ao();
