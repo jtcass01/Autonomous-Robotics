@@ -18,7 +18,7 @@ class DataVisualization():
         fig, axis = plt.subplots()
         axis.plot(time, goal, c='black', label="goal")
         axis.scatter(time, actual_data, s=10, marker='o', c='blue', label="actual_data")
-        axis.set_ylim((goal[0] - 250, goal[0] + 250))
+        axis.set_ylim((goal[0] - 300, goal[0] + 300))
         axis.set_ylabel("Sensor Response")
 
         if leftMotorPowers is not None:

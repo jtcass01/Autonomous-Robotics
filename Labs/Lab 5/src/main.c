@@ -51,11 +51,13 @@ void CalibrateLeftWall() {
 }
 
 int main() {
-    CalibrateLeftWall();
-
+//    CalibrateLeftWall();
+    demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 100, 100);
+    msleep(1000);
+    ao();
 //    primitiveWallFollow();
 //    primitiveGentleWallFollow();
-    proportionalController(0.05);
+//    proportionalController(0.05);
 
     return 0;
 }
@@ -71,7 +73,7 @@ void primitiveWallFollow() {
             // Go left
             demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 0, 100);
             leftMotorPowers[ix] = 0;
-            rightMotorPowers[ix] = 50;
+            rightMotorPowers[ix] = 100;
         } else {
             // Go right
             demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 100, 0);
@@ -167,6 +169,159 @@ void proportionalController(float proportionalGain) {
   printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
   printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
 }
+
+
+void proportionalDerivativeController(float proportionalGain, float derivativeGain) {
+  ix = 0;
+  int error = 0;
+  int lastError = 0;
+  float derivativeError = 0;
+  int leftMotorPower = 0;
+  int rightMotorPower = 0;
+
+  while(ix < 151) {
+      int wall = analog(LEFT_WALL);
+      printf("goal is %d; wall is %d\n", goal, wall);
+      error = goal - wall;
+      derivativeError = (float) error - (float) lastError) / 0.1
+
+      leftMotorPower = (float) 50 + proportionalGain*(float) error + derivativeGain*derivativeError;
+      rightMotorPower = (float) 50 - (proportionalGain*(float) error + derivativeGain*derivativeError);
+
+      if (leftMotorPower < -100) {
+        leftMotorPower = -100;
+      }
+
+      if (leftMotorPower > 100) {
+        leftMotorPower = 100;
+      }
+
+      if (rightMotorPower < -100) {
+        rightMotorPower = -100;
+      }
+
+      if (rightMotorPower > 100) {
+        rightMotorPower = 100;
+      }
+
+      demoMotor(LEFT_MOTOR, RIGHT_MOTOR, leftMotorPower, rightMotorPower);
+
+      responses[ix] = wall;
+      leftMotorPowers[ix] = leftMotorPower;
+      rightMotorPowers[ix] = rightMotorPower;
+      ix++;
+
+      // 10 data points a second.
+      msleep(100L);
+  }
+  ao();
+  printData("response", responses, DATA_ARRAY_SIZE);
+  printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
+  printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
+}
+
+
+void proportionalIntegralController(float proportionalGain, float integralGain) {
+  ix = 0;
+  int error = 0;
+  int integralError = 0;
+  int leftMotorPower = 0;
+  int rightMotorPower = 0;
+
+  while(ix < 151) {
+      int wall = analog(LEFT_WALL);
+      printf("goal is %d; wall is %d\n", goal, wall);
+      error = goal - wall;
+      integralError += error;
+
+      leftMotorPower = (float) 50 + proportionalGain*(float) error + integralGain*integralError);
+      rightMotorPower = (float) 50 - (proportionalGain*(float) error + integralGain*integralError);
+
+      if (leftMotorPower < -100) {
+        leftMotorPower = -100;
+      }
+
+      if (leftMotorPower > 100) {
+        leftMotorPower = 100;
+      }
+
+      if (rightMotorPower < -100) {
+        rightMotorPower = -100;
+      }
+
+      if (rightMotorPower > 100) {
+        rightMotorPower = 100;
+      }
+
+      demoMotor(LEFT_MOTOR, RIGHT_MOTOR, leftMotorPower, rightMotorPower);
+
+      responses[ix] = wall;
+      leftMotorPowers[ix] = leftMotorPower;
+      rightMotorPowers[ix] = rightMotorPower;
+      ix++;
+
+      // 10 data points a second.
+      msleep(100L);
+  }
+  ao();
+  printData("response", responses, DATA_ARRAY_SIZE);
+  printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
+  printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
+}
+
+
+void proportionalIntegralDerivativeController(float proportionalGain, float integralGain, float derivativeGain) {
+  ix = 0;
+  int error = 0;
+  int lastError = 0;
+  int integralError = 0;
+  float derivativeError = 0;
+  int leftMotorPower = 0;
+  int rightMotorPower = 0;
+
+  while(ix < 151) {
+      int wall = analog(LEFT_WALL);
+      printf("goal is %d; wall is %d\n", goal, wall);
+      error = goal - wall;
+      derivativeError = (float) error - (float) lastError) / 0.1
+      integralError += error;
+
+      leftMotorPower = (float) 50 + proportionalGain*(float) error + derivativeGain*derivativeError + integralGain*integralError);
+      rightMotorPower = (float) 50 - (proportionalGain*(float) error + derivativeGain*derivativeError + integralGain*integralError);
+
+      if (leftMotorPower < -100) {
+        leftMotorPower = -100;
+      }
+
+      if (leftMotorPower > 100) {
+        leftMotorPower = 100;
+      }
+
+      if (rightMotorPower < -100) {
+        rightMotorPower = -100;
+      }
+
+      if (rightMotorPower > 100) {
+        rightMotorPower = 100;
+      }
+
+      demoMotor(LEFT_MOTOR, RIGHT_MOTOR, leftMotorPower, rightMotorPower);
+
+      responses[ix] = wall;
+      leftMotorPowers[ix] = leftMotorPower;
+      rightMotorPowers[ix] = rightMotorPower;
+      ix++;
+
+      // 10 data points a second.
+      msleep(100L);
+  }
+  ao();
+  printData("response", responses, DATA_ARRAY_SIZE);
+  printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
+  printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
+}
+
+
 
 void printData(char *dataLabel, int *data, int dataSize) {
     printf("%s : [", dataLabel);
