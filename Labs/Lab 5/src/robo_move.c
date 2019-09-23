@@ -8,6 +8,12 @@ void goDemobot(int leftMotor, int rightMotor, int millisecond_t, int powerLevelL
 }
 // end goDemobot
 
+void demoMotor(int leftMotor, int rightMotor, int leftMotorPower, int rightMotorPower) {
+  motor(leftMotor, leftMotorPower);
+  motor(rightMotor, rightMotorPower);
+}
+
+
 void goDemobotMav(int leftMotor, int rightMotor, int millisecond_t, int leftVelocity, int rightVelocity) {
   mav(leftMotor, leftVelocity*0.944);
   mav(rightMotor, rightVelocity);

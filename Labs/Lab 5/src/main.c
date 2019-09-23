@@ -17,13 +17,15 @@
 
 static int goal;
 static int ix;
-static int data[DATA_ARRAY_SIZE];
+static int responses[DATA_ARRAY_SIZE];
+static int leftMotorPowers[DATA_ARRAY_SIZE];
+static int rightMotorPowers[DATA_ARRAY_SIZE];
 
 void CalibrateLeftWall();
 void primitiveWallFollow();
 void primitiveGentleWallFollow();
 void proportionalController(float proportionalGain);
-void printData(int *data, int dataSize);
+void printData(char *dataLabel, int *data, int dataSize);
 
 void CalibrateLeftWall() {
   while (1) {
@@ -67,19 +69,26 @@ void primitiveWallFollow() {
 
         if (wall < goal) {
             // Go left
-            goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 0, 1000);
+            demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 0, 100);
+            leftMotorPowers[ix] = 0;
+            rightMotorPowers[ix] = 50;
         } else {
             // Go right
-            goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 1000, 0);
+            demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 100, 0);
+            leftMotorPowers[ix] = 100;
+            rightMotorPowers[ix] = 0;
         }
 
-        data[ix++ % DATA_ARRAY_SIZE] = wall;
+        responses[ix] = wall;
+        ix++;
 
         // 10 data points a second.
         msleep(100L);
     }
     ao();
-    printData(data, DATA_ARRAY_SIZE);
+    printData("response", responses, DATA_ARRAY_SIZE);
+    printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
+    printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
 }
 
 void primitiveGentleWallFollow() {
@@ -91,19 +100,26 @@ void primitiveGentleWallFollow() {
 
         if (wall < goal) {
             // Go left
-            goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 500, 1000);
+            demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 50, 100);
+            leftMotorPowers[ix] = 50;
+            rightMotorPowers[ix] = 100;
         } else {
             // Go right
-            goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 1000, 500);
+            demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 100, 50);
+            leftMotorPowers[ix] = 100;
+            rightMotorPowers[ix] = 50;
         }
 
-        data[ix++ % DATA_ARRAY_SIZE] = wall;
+        responses[ix] = wall;
+        ix++;
 
         // 10 data points a second.
         msleep(100L);
     }
     ao();
-    printData(data, DATA_ARRAY_SIZE);
+    printData("response", responses, DATA_ARRAY_SIZE);
+    printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
+    printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
 }
 
 void proportionalController(float proportionalGain) {
@@ -136,19 +152,24 @@ void proportionalController(float proportionalGain) {
         rightMotorPower = 100;
       }
 
-      goDemobot(LEFT_MOTOR, RIGHT_MOTOR, 50, leftMotorPower, rightMotorPower);
+      demoMotor(LEFT_MOTOR, RIGHT_MOTOR, leftMotorPower, rightMotorPower);
 
-      data[ix++ % DATA_ARRAY_SIZE] = wall;
+      responses[ix] = wall;
+      leftMotorPowers[ix] = leftMotorPower;
+      rightMotorPowers[ix] = rightMotorPower;
+      ix++;
 
       // 10 data points a second.
       msleep(100L);
   }
   ao();
-  printData(data, DATA_ARRAY_SIZE);
+  printData("response", responses, DATA_ARRAY_SIZE);
+  printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
+  printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
 }
 
-void printData(int *data, int dataSize) {
-    printf("[");
+void printData(char *dataLabel, int *data, int dataSize) {
+    printf("%s : [", dataLabel);
     int dataIndex = 0;
     while(dataIndex++ < dataSize) {
         if(dataIndex < dataSize -1) {
