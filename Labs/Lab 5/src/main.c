@@ -25,6 +25,7 @@ void CalibrateLeftWall();
 void primitiveWallFollow();
 void primitiveGentleWallFollow();
 void proportionalController(float proportionalGain);
+int bind(int, int, int);
 void printData(char *dataLabel, int *data, int dataSize);
 
 void CalibrateLeftWall() {
@@ -66,17 +67,20 @@ void primitiveWallFollow() {
     ix = 0;
 
     while(ix < 151) {
+        // Get data from sensor.
         int wall = analog(LEFT_WALL);
         printf("goal is %d; wall is %d\n", goal, wall);
 
         if (wall < goal) {
             // Go left
             demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 0, 100);
+            // Store motor powers
             leftMotorPowers[ix] = 0;
             rightMotorPowers[ix] = 100;
         } else {
             // Go right
             demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 100, 0);
+            // Store motor powers
             leftMotorPowers[ix] = 100;
             rightMotorPowers[ix] = 0;
         }
@@ -87,7 +91,9 @@ void primitiveWallFollow() {
         // 10 data points a second.
         msleep(100L);
     }
+    // Shut off motors.
     ao();
+    // Display results.
     printData("response", responses, DATA_ARRAY_SIZE);
     printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
     printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
@@ -97,32 +103,51 @@ void primitiveGentleWallFollow() {
     ix = 0;
 
     while(ix < 151) {
+        // Get data from sensor.
         int wall = analog(LEFT_WALL);
         printf("goal is %d; wall is %d\n", goal, wall);
 
         if (wall < goal) {
             // Go left
             demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 50, 100);
+            // Store motor powers
             leftMotorPowers[ix] = 50;
             rightMotorPowers[ix] = 100;
         } else {
             // Go right
             demoMotor(LEFT_MOTOR, RIGHT_MOTOR, 100, 50);
+            // Store motor powers
             leftMotorPowers[ix] = 100;
             rightMotorPowers[ix] = 50;
         }
 
+        // Store sensor response
         responses[ix] = wall;
+        // increment data index.
         ix++;
 
         // 10 data points a second.
         msleep(100L);
     }
+    // Shut off motors.
     ao();
+    // Display results.
     printData("response", responses, DATA_ARRAY_SIZE);
     printData("leftMotorPower", leftMotorPowers, DATA_ARRAY_SIZE);
     printData("rightMotorPower", rightMotorPowers, DATA_ARRAY_SIZE);
 }
+
+
+int bind(int value, int lowerBound, int upperBound) {
+  if (value < lowerBound) {
+    return lowerBound;
+  } else if (value > upperBound) {
+    return upperBound;
+  } else {
+    return value;
+  }
+}
+
 
 void proportionalController(float proportionalGain) {
   ix = 0;
@@ -131,31 +156,24 @@ void proportionalController(float proportionalGain) {
   int rightMotorPower = 0;
 
   while(ix < 151) {
+      // Get data from sensor.
       int wall = analog(LEFT_WALL);
       printf("goal is %d; wall is %d\n", goal, wall);
+      // Calculate error.
       error = goal - wall;
 
+      // Update motor powers considering proportionalGain.
       leftMotorPower = (float) 50 + proportionalGain*(float) error;
       rightMotorPower = (float) 50 - proportionalGain*(float) error;
 
-      if (leftMotorPower < -100) {
-        leftMotorPower = -100;
-      }
+      // Ensure powers are bound by [-100, 100]
+      leftMotorPower = bind(leftMotorPower, -100, 100);
+      rightMotorPower = bind(rightMotorPower, -100, 100);
 
-      if (leftMotorPower > 100) {
-        leftMotorPower = 100;
-      }
-
-      if (rightMotorPower < -100) {
-        rightMotorPower = -100;
-      }
-
-      if (rightMotorPower > 100) {
-        rightMotorPower = 100;
-      }
-
+      // Update motor speed.
       demoMotor(LEFT_MOTOR, RIGHT_MOTOR, leftMotorPower, rightMotorPower);
 
+      // Store response and motor powers.  Update indices
       responses[ix] = wall;
       leftMotorPowers[ix] = leftMotorPower;
       rightMotorPowers[ix] = rightMotorPower;
