@@ -345,7 +345,7 @@ void printData(char *dataLabel, int *data, int dataSize) {
     printf("%s : [", dataLabel);
     int dataIndex = 0;
     while(dataIndex++ < dataSize) {
-        if(dataIndex < dataSize -1) {
+        if(dataIndex < dataSize) {
 	        printf("%d, ", data[dataIndex]);
         } else {
 	        printf("%d", data[dataIndex]);
