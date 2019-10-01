@@ -18,19 +18,21 @@ class DataVisualization():
         fig, axis = plt.subplots()
         axis.plot(time, goal, c='black', label="goal")
         axis.scatter(time, actual_data, s=10, marker='o', c='blue', label="actual_data")
-        axis.set_ylim((0, 4096))
+        axis.scatter(time, actual_data + -goal, s=10, marker='o', c='red', label='error')
+        axis.legend()
+        axis.set_ylim((-2000, 4096))
         axis.set_ylabel("Sensor Response")
 
         if left_motor_powers is not None:
             axis2 = axis.twinx()
             axis2.scatter(time, left_motor_powers, s=10, marker='s', c='green', label="Left Motor Power")
             axis2.scatter(time, right_motor_powers, s=10, marker='s', c='yellow', label="Right Motor Power")
+            axis2.legend()
             axis2.set_ylim((-105, 105))
             axis2.set_ylabel("Motor Power")
 
         plt.xlabel("Time (ms)")
         plt.xlim(0, len(time)*100)
-        plt.legend(loc=2, fontsize='small')
         plt.show()
 
     @staticmethod
@@ -44,14 +46,14 @@ class DataVisualization():
         return input("Menu Response: ")
 
     @staticmethod
-    def data_to_csv(file_name, actual_data, left_motor_powers, right_motor_powers):
+    def data_to_csv(file_name, actual_data, goal, left_motor_powers, right_motor_powers):
         with open(file_name, "w+") as csv_file:
-            csv_file.write("{},{},{}\n".format("actual_data", "left_motor_powers", "right_motor_powers"))
+            csv_file.write("{},{},{},{}\n".format("actual_data", "error", "left_motor_powers", "right_motor_powers"))
 
             for data_index in range(len(actual_data)):
                 if int(actual_data[data_index]) == 0:
                     break
-                csv_file.write("{},{},{}\n".format(actual_data[data_index], left_motor_powers[data_index], right_motor_powers[data_index]))
+                csv_file.write("{},{},{},{}\n".format(actual_data[data_index], goal-actual_data, left_motor_powers[data_index], right_motor_powers[data_index]))
 
 def convert_strlist_to_npint(strlist):
     list_representation = strlist.strip('][').split(", ")
