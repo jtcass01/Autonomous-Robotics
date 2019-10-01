@@ -38,9 +38,20 @@ class DataVisualization():
         print("===== Data Visualization Menu =====")
         print("1 ) Plot goal versus actual")
         print("2 ) Plot goal versus actual with motor powers")
+        print("3 ) Data to csv")
         print("0 ) quit")
 
         return input("Menu Response: ")
+
+    @staticmethod
+    def data_to_csv(file_name, actual_data, left_motor_powers, right_motor_powers):
+        with open(file_name, "w+") as csv_file:
+            csv_file.write("{},{},{}\n".format("actual_data", "left_motor_powers", "right_motor_powers"))
+
+            for data_index in range(len(actual_data)):
+                if int(actual_data[data_index]) == 0:
+                    break
+                csv_file.write("{},{},{}\n".format(actual_data[data_index], left_motor_powers[data_index], right_motor_powers[data_index]))
 
 def convert_strlist_to_npint(strlist):
     list_representation = strlist.strip('][').split(", ")
@@ -57,10 +68,10 @@ def input_goal_and_actual():
 
 
 def input_motor_powers():
-    leftMotorPowers = convert_strlist_to_npint(input("What were your left motor powers: "))
-    rightMotorPowers = convert_strlist_to_npint(input("What were your right motor powers: "))
+    left_motor_powers = convert_strlist_to_npint(input("What were your left motor powers: "))
+    right_motor_powers = convert_strlist_to_npint(input("What were your right motor powers: "))
 
-    return leftMotorPowers, rightMotorPowers
+    return left_motor_powers, right_motor_powers
 
 
 if __name__ == "__main__":
@@ -76,3 +87,8 @@ if __name__ == "__main__":
             goal, actual_data = input_goal_and_actual()
             left_motor_powers, right_motor_powers = input_motor_powers()
             DataVisualization.plot_goal_and_actual(goal, actual_data, left_motor_powers=left_motor_powers, right_motor_powers=right_motor_powers)
+        elif response == "3":
+            file_name = input("file_name: ")
+            goal, actual_data = input_goal_and_actual()
+            left_motor_powers, right_motor_powers = input_motor_powers()
+            DataVisualization.data_to_csv(file_name, actual_data, left_motor_powers, right_motor_powers)
