@@ -13,13 +13,13 @@ int main() {
   goal = CalibrateGoal();
 
   // primitive wall follow
-//  primitiveWallFollow(goal);
+  primitiveWallFollow(goal);
 
   // primitiveGentleWallFollow
 //  primitiveGentleWallFollow(goal);
 
   // kp
-//  proportionalController(LEFT_WALL, goal, 0.075);
+  proportionalController(LEFT_WALL, goal, 0.075);
 
   // kpkd
 //  proportionalDerivativeController(LEFT_WALL, goal, 0.02, 0.000076);

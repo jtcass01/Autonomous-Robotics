@@ -85,7 +85,7 @@ void proportionalDerivativeController(int sensorControl, int sensorGoal, float p
       int sensorResponse = analog(sensorControl);
       printf("sensorGoal is %d; sensorResponse is %d\n", sensorGoal, sensorResponse);
       error = sensorGoal - sensorResponse;
-      derivativeError = (float) error - (float) lastError) / 0.1
+      derivativeError = (float) error - (float) lastError) / 0.1;
 
       leftMotorPower = (float) 50 + proportionalGain*(float) error + derivativeGain*derivativeError;
       rightMotorPower = (float) 50 - (proportionalGain*(float) error + derivativeGain*derivativeError);
@@ -127,7 +127,7 @@ void proportionalIntegralController(int sensorControl, int sensorGoal, float pro
       error = sensorGoal - sensorResponse;
       integralError += error;
 
-      leftMotorPower = (float) 50 + proportionalGain*(float) error + integralGain*integralError);
+      leftMotorPower = (float) 50 + proportionalGain*(float) error + integralGain*integralError;
       rightMotorPower = (float) 50 - (proportionalGain*(float) error + integralGain*integralError);
 
       // Ensure powers are bound by [-100, 100]
@@ -167,10 +167,10 @@ void proportionalIntegralDerivativeController(int sensorControl, int sensorGoal,
       int sensorResponse = analog(sensorControl);
       printf("sensorGoal is %d; sensorResponse is %d\n", sensorGoal, sensorResponse);
       error = sensorGoal - sensorResponse;
-      derivativeError = (float) error - (float) lastError) / 0.1
+      derivativeError = (float) error - (float) lastError) / 0.1;
       integralError += error;
 
-      leftMotorPower = (float) 50 + proportionalGain*(float) error + derivativeGain*derivativeError + integralGain*integralError);
+      leftMotorPower = (float) 50 + proportionalGain*(float) error + derivativeGain*derivativeError + integralGain*integralError;
       rightMotorPower = (float) 50 - (proportionalGain*(float) error + derivativeGain*derivativeError + integralGain*integralError);
 
       // Ensure powers are bound by [-100, 100]
