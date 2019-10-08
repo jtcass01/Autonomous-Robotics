@@ -41,6 +41,7 @@ class DataVisualization():
         print("1 ) Plot goal versus actual")
         print("2 ) Plot goal versus actual with motor powers")
         print("3 ) Data to csv")
+        print("4 ) Plot and Data to CSV")
         print("0 ) quit")
 
         return input("Menu Response: ")
@@ -53,7 +54,7 @@ class DataVisualization():
             for data_index in range(len(actual_data)):
                 if int(actual_data[data_index]) == 0:
                     break
-                csv_file.write("{},{},{},{}\n".format(actual_data[data_index], goal-actual_data, left_motor_powers[data_index], right_motor_powers[data_index]))
+                csv_file.write("{},{},{},{}\n".format(actual_data[data_index], goal-actual_data[data_index], left_motor_powers[data_index], right_motor_powers[data_index]))
 
 def convert_strlist_to_npint(strlist):
     list_representation = strlist.strip('][').split(", ")
@@ -93,4 +94,10 @@ if __name__ == "__main__":
             file_name = input("file_name: ")
             goal, actual_data = input_goal_and_actual()
             left_motor_powers, right_motor_powers = input_motor_powers()
-            DataVisualization.data_to_csv(file_name, actual_data, left_motor_powers, right_motor_powers)
+            DataVisualization.data_to_csv(file_name, actual_data, goal, left_motor_powers, right_motor_powers)
+        elif response == "4":
+            file_name = input("file_name: ")
+            goal, actual_data = input_goal_and_actual()
+            left_motor_powers, right_motor_powers = input_motor_powers()
+            DataVisualization.data_to_csv(file_name, actual_data, goal, left_motor_powers, right_motor_powers)
+            DataVisualization.plot_goal_and_actual(goal, actual_data, left_motor_powers=left_motor_powers, right_motor_powers=right_motor_powers)
