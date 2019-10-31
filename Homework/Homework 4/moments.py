@@ -118,7 +118,19 @@ if __name__ == "__main__":
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
 
-    moments = [Moment.Area(problem_4), Moment.CenterOfMass(problem_4), Moment.Orientation(problem_4)]
+    notes_example = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]
 
-    for moment in moments:
-        print(moment)
+    examples = [problem_4, notes_example]
+
+    for example in examples:
+        moments = [Moment.Area(example), Moment.CenterOfMass(example), Moment.Orientation(example)]
+
+        for moment in moments:
+            print(moment)
