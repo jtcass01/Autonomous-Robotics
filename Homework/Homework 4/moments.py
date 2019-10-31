@@ -102,7 +102,7 @@ class Moment():
             myy = Moment.Orientation.calculate_myy(image)
             mxy = Moment.Orientation.calculate_mxy(image)
 
-            return np.arctan((mxx - myy + ((mxx - myy)**2 + mxy**2)**0.5) / mxy)
+            return np.arctan(mxy / (mxx - myy + ((mxx - myy)**2 + mxy**2)**0.5))
 
 if __name__ == "__main__":
     problem_4 = [
