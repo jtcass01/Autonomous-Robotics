@@ -9,6 +9,6 @@
 #include "running_average.h"
 
 void ObjectLocalizationThread(void);
-void ReportCameraPosition(void);
+
 
 #endif
