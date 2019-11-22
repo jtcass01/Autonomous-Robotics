@@ -54,3 +54,31 @@ void ReportCameraPosition(void) {
   //close the connection with the camera.
   camera_close();
 }
+
+int ConvertFrontSonarReadingToCM(int sensorReading) {
+  int result = (int) (((float) sensorReading - 42.0747619) / 2.96188645)
+
+  if result < 6 {
+    return 6;
+  } else {
+    return result;
+  }
+}
+
+int ConvertFrontSonarCMToSonarReading(int distance) {
+  return (int) (2.96188645 * distance + 42.0747619);
+}
+
+int ConvertLeftLidarReadingToCM(int sensorReading) {
+  int result = (int) (((float) sensorReading - 3034.46775758) / -70.7440202)
+
+  if result < 10 {
+    return 10;
+  } else {
+    return result;
+  }
+}
+
+int ConvertLeftLidarCMToSonarReading(int distance) {
+  return (int) (-70.7440202 * distance + 3034.46775758);
+}

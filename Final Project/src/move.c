@@ -1,9 +1,9 @@
 #include "move.h"
 
 void goDemobot(int leftMotor, int rightMotor, int millisecond_t, int powerLevelLeft, int powerLevelRight) {
-    motor(leftMotor, powerLevelLeft * 0.925);
-    motor(rightMotor, powerLevelRight);
-    wait_for_milliseconds(millisecond_t);
+    motor(leftMotor, powerLevelLeft);
+    motor(rightMotor, powerLevelRight * 0.925);
+    msleep(millisecond_t);
     ao();
 }
 // end goDemobot
@@ -39,24 +39,24 @@ void goStraightMav(int leftMotor, int rightMotor, int millisecond_t, int velocit
 }
 
 
-void make90Turn(int leftMotor, int rightMotor, int leftTurn, int powerLevel) {
+void make90Turn(int leftMotor, int rightMotor, int leftTurn, int velocity) {
     if(leftTurn) {
         /// Turn 90 degress Left
-        goDemobot(leftMotor, rightMotor, 2000 , 0, powerLevel);
+        goDemobotMav(leftMotor, rightMotor, 1600, 0, velocity);
     } else {
 	    /// Turn 90 degrees Right
-        goDemobot(leftMotor, rightMotor, 2000, powerLevel, 0);
+        goDemobotMav(leftMotor, rightMotor, 1600, velocity, 0);
     }
 }
 
 void turnLeft(int leftMotor, int rightMotor) {
     // Turn left
-	make90Turn(leftMotor, rightMotor, 1, 63);
+	make90Turn(leftMotor, rightMotor, 1, 750);
 }
 
 void turnRight(int leftMotor, int rightMotor) {
     // Turn right
-	make90Turn(leftMotor, rightMotor, 0, 63);
+	make90Turn(leftMotor, rightMotor, 0, 750);
 }
 
 void driftLeftMav(int leftMotor, int rightMotor, int millisecond_t, int velocity) {
