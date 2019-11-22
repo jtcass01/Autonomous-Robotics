@@ -3,7 +3,7 @@
 
 #include <kipr/botball.h>
 #include "constants.h"
-#include "camera_tracking.h"
+#include "sensor.h"
 #include "lasso.h"
 #include "globals.h"
 

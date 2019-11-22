@@ -3,13 +3,11 @@
 void Demo(void) {
   // create threads
   thread executiveThread = thread_create(ExecutiveThread);
-//  thread cameraThread = thread_create(ObjectLocalizationThread);
   thread driveThread = thread_create(DriveThread);
   thread lassoThread = thread_create(LassoThread);
 
   // start threads
   thread_start(executiveThread);
-//  thread_start(cameraThread);
   thread_start(driveThread);
   thread_start(lassoThread);
 
@@ -19,7 +17,6 @@ void Demo(void) {
   // Destroy threads
   thread_destroy(executiveThread);
 //  thread_destroy(cameraThread);
-  thread_destroy(driveThread);
   thread_destroy(lassoThread);
 }
 
@@ -90,6 +87,7 @@ void DriveThread(void) {
   int leftMotorPower = 0;
   int rightMotorPower = 0;
   int objectCount = 0;
+  ROBOT_STATE_READING_QR_SUBSTATE readingQRSubstate = ROBOT_STATE_READING_QR_SUBSTATE_FINDING_WALL;
 
   // Open a connection with the camera.
   camera_open();
@@ -100,25 +98,25 @@ void DriveThread(void) {
         // Update the camera image
         camera_update();
 
-        // Drive forward
-
-        // Turn left
-
-        // Drive forward
-
-        // Calculate wall goal
-
-        // follow wall until sonar sees the wall in front
-
-        // Turn left
-
-        // drive forward until wall is seen
-
-        // wait for QR reading
-
-        printf("QR code read.\n");
-        gv_stateFinishedSignal = 1;
-        wait_for_milliseconds(1000);
+        switch(readingQRSubstate) {
+          case ROBOT_STATE_READING_QR_SUBSTATE_FINDING_WALL:
+            readingQRSubstate = ROBOT_STATE_READING_QR_SUBSTATE_FOLLOWING_WALL;
+            break;
+          case ROBOT_STATE_READING_QR_SUBSTATE_FOLLOWING_WALL:
+            readingQRSubstate = ROBOT_STATE_READING_QR_SUBSTATE_APPROACHING_QR;
+            break;
+          case ROBOT_STATE_READING_QR_SUBSTATE_APPROACHING_QR:
+            readingQRSubstate = ROBOT_STATE_READING_QR_SUBSTATE_TAKING_READING;
+            break;
+          case ROBOT_STATE_READING_QR_SUBSTATE_TAKING_READING:
+            printf("QR code read.\n");
+            gv_stateFinishedSignal = 1;
+            wait_for_milliseconds(1000);
+            break;
+          case ROBOT_STATE_READING_QR_SUBSTATE_INVALID:
+            readingQRSubstate = ROBOT_STATE_READING_QR_SUBSTATE_FINDING_WALL;
+            break;
+        }
         break;
 
       case ROBOT_STATE_SEARCHING_FOR_OBJECT:

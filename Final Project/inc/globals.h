@@ -1,8 +1,6 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include "running_average.h"
-
 // Enums
 typedef enum {
   ROBOT_STATE_INVALID = 0,
@@ -14,6 +12,14 @@ typedef enum {
 } ROBOT_STATE;
 
 typedef enum {
+  ROBOT_STATE_READING_QR_SUBSTATE_INVALID = 0,
+  ROBOT_STATE_READING_QR_SUBSTATE_FINDING_WALL = 1,
+  ROBOT_STATE_READING_QR_SUBSTATE_FOLLOWING_WALL = 2,
+  ROBOT_STATE_READING_QR_SUBSTATE_APPROACHING_QR = 3,
+  ROBOT_STATE_READING_QR_SUBSTATE_TAKING_READING = 4
+} ROBOT_STATE_READING_QR_SUBSTATE;
+
+typedef enum {
   LASSO_STATE_INVALID = 0,
   LASSO_STATE_DOWN = 1,
   LASSO_STATE_UP = 2,
@@ -21,13 +27,8 @@ typedef enum {
 } LASSO_STATE;
 
 // Global variables
-extern ROBOT_MODE gv_robotMode;
+extern ROBOT_STATE gv_robotState;
 extern LASSO_STATE gv_lassoState;
-extern RunningAverage gv_ra_x;
-extern RunningAverage gv_ra_y;
-extern int gv_lastObjectX;
-extern int gv_lastObjectY;
-extern int gv_lastObjectCount;
 extern int gv_stateFinishedSignal;
 extern int gv_stateFailedSignal;
 

@@ -1,5 +1,20 @@
 #include "sensor.h"
 
+void ReportAnalogSensorValues(int sensorControl) {
+  int ix = 0;
+  int sensorResponse = 0;
+  int sensorReadings[TEST_DATA_ARRAY_SIZE] = {0};
+
+  while(ix < TEST_DATA_ARRAY_SIZE) {
+    sensorResponse = analog(sensorControl);
+    sensorReadings[ix++] = sensorResponse;
+    printf("Sensor Response for analog pin %d = %d\n", sensorControl, sensorResponse);
+    wait_for_milliseconds(100);
+  }
+
+  printData("Sensor Readings", sensorReadings, TEST_DATA_ARRAY_SIZE);
+}
+
 void ReportCameraPosition(void) {
   int channelNumber = OBJECT_CHANNEL_NUMBER;
   int objectYLocation = 0;
@@ -8,14 +23,6 @@ void ReportCameraPosition(void) {
   int ix = 0;
   int xReadings[TEST_DATA_ARRAY_SIZE] = {0};
   int yReadings[TEST_DATA_ARRAY_SIZE] = {0};
-  int xRAReadings[TEST_DATA_ARRAY_SIZE] = {0};
-  int yRAReadings[TEST_DATA_ARRAY_SIZE] = {0};
-  RunningAverage xRA = {0};
-  RunningAverage yRA = {0};
-
-  // Initialize Running Averages
-  RA_Init(&xRA);
-  RA_Init(&yRA);
 
   // Open a connection with the camera.
   camera_open();
@@ -33,23 +40,16 @@ void ReportCameraPosition(void) {
       objectYLocation = get_object_center_y(channelNumber, 0);
       xReadings[ix] = objectXLocation;
       yReadings[ix] = objectYLocation;
-      xRAReadings[ix] = RA_Update(&xRA, objectXLocation);
-      yRAReadings[ix] = RA_Update(&yRA, objectYLocation);
 
-      printf("Object Location: (%d, %d)\n", xRAReadings[ix], yRAReadings[ix]);
+      printf("Object Location: (%d, %d)\n", xReadings[ix], yReadings[ix]);
       ix++;
-    } else {
-      RA_Init(&xRA);
-      RA_Init(&yRA);
     }
 
     wait_for_milliseconds(100);
   }
 
   printData("xReadings", xReadings, TEST_DATA_ARRAY_SIZE);
-  printData("xRAReadings", xRAReadings, TEST_DATA_ARRAY_SIZE);
   printData("yReadings", yReadings, TEST_DATA_ARRAY_SIZE);
-  printData("yRAReadings", yRAReadings, TEST_DATA_ARRAY_SIZE);
 
   //close the connection with the camera.
   camera_close();
