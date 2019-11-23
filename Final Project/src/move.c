@@ -15,7 +15,7 @@ void demoMotor(int leftMotor, int rightMotor, int leftMotorPower, int rightMotor
 
 
 void goDemobotMav(int leftMotor, int rightMotor, int millisecond_t, int leftVelocity, int rightVelocity) {
-  mav(leftMotor, leftVelocity*0.944);
+  mav(leftMotor, leftVelocity*0.939);
   mav(rightMotor, rightVelocity);
   msleep(millisecond_t);
   ao();
@@ -32,7 +32,7 @@ void goStraightMrp(int leftMotor, int rightMotor, int velocity, int numberOfTick
 }
 
 void goStraightMav(int leftMotor, int rightMotor, int millisecond_t, int velocity) {
-    mav(leftMotor, velocity*0.944);
+    mav(leftMotor, velocity*0.939);
     mav(rightMotor, velocity);
     msleep(millisecond_t);
     ao();

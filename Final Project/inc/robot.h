@@ -6,11 +6,12 @@
 #include "sensor.h"
 #include "lasso.h"
 #include "globals.h"
+#include "move.h"
 
 // Function prototypes
 void Demo(void);
-void ExecutiveThread(void);
 void DriveThread(void);
-void UpdateMotorPowers_TrackObject(int *leftMotorPower, int *rightMotorPower);
+void ButtonThread(void);
+int UpdateMotorPowers_TrackObject(int *leftMotorPower, int *rightMotorPower);
 
 #endif

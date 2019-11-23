@@ -15,8 +15,7 @@ void ReportAnalogSensorValues(int sensorControl) {
   printData("Sensor Readings", sensorReadings, TEST_DATA_ARRAY_SIZE);
 }
 
-void ReportCameraPosition(void) {
-  int channelNumber = OBJECT_CHANNEL_NUMBER;
+void ReportCameraPosition(int channelNumber) {
   int objectYLocation = 0;
   int objectXLocation = 0;
   int objectCount = 0;
@@ -56,9 +55,9 @@ void ReportCameraPosition(void) {
 }
 
 int ConvertFrontSonarReadingToCM(int sensorReading) {
-  int result = (int) (((float) sensorReading - 42.0747619) / 2.96188645)
+  int result = (int) (((float) sensorReading - 42.0747619) / 2.96188645);
 
-  if result < 6 {
+  if (result < 6) {
     return 6;
   } else {
     return result;
@@ -70,9 +69,9 @@ int ConvertFrontSonarCMToSonarReading(int distance) {
 }
 
 int ConvertLeftLidarReadingToCM(int sensorReading) {
-  int result = (int) (((float) sensorReading - 3034.46775758) / -70.7440202)
+  int result = (int) (((float) sensorReading - 3034.46775758) / -70.7440202);
 
-  if result < 10 {
+  if (result < 10) {
     return 10;
   } else {
     return result;

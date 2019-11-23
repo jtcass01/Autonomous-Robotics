@@ -26,10 +26,17 @@ typedef enum {
   LASSO_STATE_WAITING = 3
 } LASSO_STATE;
 
+typedef enum {
+  OBJECT_COLOR_INVALID = 0,
+  OBJECT_COLOR_GREEN = 1,
+  OBJECT_COLOR_ORANGE = 2,
+  OBJECT_COLOR_PURPLE = 3,
+} OBJECT_COLOR;
+
 // Global variables
 extern ROBOT_STATE gv_robotState;
 extern LASSO_STATE gv_lassoState;
-extern int gv_stateFinishedSignal;
-extern int gv_stateFailedSignal;
+extern OBJECT_COLOR gv_objectColor;
+extern int gv_dealingWithButton;
 
 #endif

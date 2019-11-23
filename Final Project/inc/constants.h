@@ -2,12 +2,14 @@
 #define CONSTANTS_H
 
 // Camera Constants
-#define OBJECT_CHANNEL_NUMBER                 0
-#define QR_CHANNEL_NUMBER                     1
+#define GREEN_CHANNEL_NUMBER                  1
+#define ORANGE_CHANNEL_NUMBER                 2
+#define PURPLE_CHANNEL_NUMBER                 3
+#define QR_CHANNEL_NUMBER                     0
 #define IMAGE_WIDTH                           160
 #define IMAGE_HEIGHT                          120
 #define OBJECT_X_GOAL                         80
-#define OBJECT_LASSO_Y_CAP                    97
+#define OBJECT_LASSO_Y_CAP                    105
 #define OBJECT_LASSO_X_TOLERANCE              2
 
 // Servo Motors
@@ -25,11 +27,6 @@
 #define A_FRONT_SONAR_MAX                     4092
 #define A_FRONT_SONAR_MIN                     0
 #define A_FRONT_SONAR_COLLISION_THRESHOLD_CM  15
-/// Left Lidar
-#define A_LEFT_LIDAR                          1
-#define A_LEFT_LIDAR_MAX                      4092
-#define A_LEFT_LIDAR_MIN                      0
-#define A_LEFT_LIDAR_WALL_FOLLOW_GOAL_CM      16
 /// Front Left
 #define A_FRONT_LEFT_IR                       2
 #define A_FRONT_LEFT_IR_MAX                   4092
@@ -46,6 +43,10 @@
 #define A_BACK_RIGHT_IR                       5
 #define A_BACK_RIGHT_IR_MAX                   4092
 #define A_BACK_RIGHT_IR_MIN                   0
+
+// Digital Inputs
+#define D_FRONT_LEFT_BUTTON                   0
+#define D_FRONT_RIGHT_BUTTON                  9
 
 // PID Controller Constants
 #define PID_WALL_FOLLOW_KP                    0.01

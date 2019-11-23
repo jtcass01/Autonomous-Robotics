@@ -6,7 +6,7 @@
 #include "utilities.h"
 
 void ReportAnalogSensorValues(int sensorControl);
-void ReportCameraPosition(void);
+void ReportCameraPosition(int channelNumber);
 int ConvertFrontSonarReadingToCM(int sensorReading);
 int ConvertFrontSonarCMToSonarReading(int distance);
 int ConvertLeftLidarReadingToCM(int sensorReading);
