@@ -1,0 +1,28 @@
+(white_ir_readings)
+
+!!! ANALYSIS_RESULTS !!!
+
+
+(black_ir_readings)
+
+!!! ANALYSIS_RESULTS !!!
+
+
+(far_corner_black_ir_readings)
+
+!!! ANALYSIS_RESULTS !!!
+
+
+(near_corner_black_ir_readings)
+
+!!! ANALYSIS_RESULTS !!!
+
+
+(far_corner_white_ir_readings)
+
+!!! ANALYSIS_RESULTS !!!
+
+
+(near_corner_white_ir_readings)
+
+!!! ANALYSIS_RESULTS !!!

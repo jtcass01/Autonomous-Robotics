@@ -67,8 +67,7 @@ def linear_fit(distance_readings_tuples, min_linear_distance = 4):
     plt.legend()
     plt.show()
 
-
-if __name__ == "__main__":
+def sonar_lidar_test1():
     #OUTPUT y = [[2.96188645]]x + [42.0747619], min y = 6 cm
     front_sonar_readings = [
         (0, [55, 61, 60, 57, 60, 56, 59, 60, 62, 61, 58, 60, 54, 59, 57, 62, 58, 59, 55, 59, 58, 58, 55, 59, 54, 58, 60, 57, 59, 57, 60, 59, 59, 57, 59, 60, 61, 63, 57, 57, 57, 57, 61, 59, 56, 59, 58, 56, 59, 58, 58, 58, 59, 57, 59, 58, 59, 57, 62, 60, 57, 57, 58, 59, 59, 53, 56, 60, 59, 56, 59, 58, 59, 58, 57, 57, 58, 57, 60, 55, 58, 56, 56, 59, 57, 57, 60, 63, 58, 54, 63, 62, 60, 60, 58, 62, 57, 60, 58, 64, 63, 59, 59, 59, 56, 57, 59, 59, 59, 58, 58, 57, 57, 55, 60, 59, 58, 57, 58, 57, 55, 56, 60, 59, 57, 59, 57, 57, 60, 59, 59, 58, 59, 55, 62, 59, 60, 60, 58, 60, 57, 62, 59, 58, 58, 57, 56, 57, 61, 59]),
@@ -109,8 +108,10 @@ if __name__ == "__main__":
         (30, [1017, 1015, 1018, 1009, 1008, 1017, 1014, 1014, 1012, 1014, 1012, 1017, 1020, 1019, 1014, 1012, 1017, 1013, 1012, 1013, 1012, 1014, 1011, 1003, 1012, 1021, 1022, 1009, 1024, 1020, 1013, 1011, 1013, 1005, 1014, 1010, 1027, 1008, 1014, 1012, 1012, 1019, 1011, 1016, 1002, 1018, 1016, 1001, 1005, 1012, 1008, 1022, 1009, 1010, 1017, 1006, 1019, 1024, 1020, 1009, 1004, 1013, 1004, 1015, 1016, 1014, 1010, 1003, 1005, 1014, 1022, 1039, 1018, 1015, 1015, 1016, 1016, 1008, 1013, 1023, 1015, 1011, 1018, 1006, 1010, 1006, 1012, 1019, 1012, 1017, 1020, 1011, 1015, 1015, 1011, 1016, 1017, 1013, 1011, 1016, 1011, 1011, 1023, 1030, 1011, 1005, 1009, 1011, 1010, 1014, 1015, 1002, 1020, 1013, 1011, 1018, 1020, 1018, 1011, 1010, 1018, 1016, 1013, 1008, 1008, 1015, 1011, 1015, 1022, 1014, 1012, 1022, 1027, 1007, 1009, 1013, 1016, 1004, 1008, 1015, 1012, 1018, 1013, 1014, 1015, 1016, 1013, 1014, 1014, 1005]),
     ]
 
-#    linear_fit(left_lidar_readings, min_linear_distance=10)
-#    linear_fit(front_sonar_readings, min_linear_distance=6)
+    linear_fit(left_lidar_readings, min_linear_distance=10)
+    linear_fit(front_sonar_readings, min_linear_distance=6)
+
+def ir_field_test1():
 
     white_ir_readings_away = {}
     white_ir_readings_away['front_left'] = np.array([161, 161, 161, 161, 162, 161, 161, 161, 162, 162, 163, 163, 163, 163, 163, 163, 163, 163, 163, 163, 162, 162, 162, 162, 162, 162, 163, 163, 163, 163, 163, 162, 162, 162, 162, 163, 163, 162, 162, 163, 163, 162, 163, 163, 163, 163, 162, 163, 163, 163, 162, 162, 162, 162, 163, 163, 163, 162, 162, 162, 163, 163, 163, 163, 162, 162, 162, 162, 163, 163, 163, 162, 162, 162, 163, 163, 163, 163, 163, 162, 162, 162, 162, 162, 161, 161, 161, 161, 161, 161, 162, 163, 163, 164, 163, 163, 162, 163, 163, 163, 163, 162, 161, 161, 162, 161, 161, 162, 162, 162, 162, 162, 162, 162, 162, 162, 162, 161, 161, 161, 161, 161, 162, 161, 161, 162, 162, 162, 162, 162, 163, 163, 163, 163, 162, 162, 162, 162, 162, 162, 162, 163, 163, 162, 162, 162, 162, 162, 162, 162, 162])
@@ -209,3 +210,51 @@ if __name__ == "__main__":
     far_corner_black_ir_readings_towards['back_left'] = np.array([214, 213, 212, 212, 212, 214, 213, 212, 213, 213, 213, 214, 215, 215, 214, 213, 212, 212, 213, 214, 215, 213, 214, 214, 214, 214, 213, 212, 212, 212, 212, 214, 214, 214, 214, 213, 212, 212, 212, 214, 214, 213, 214, 213, 212, 212, 213, 213, 213, 214, 214, 214, 215, 214, 214, 214, 215, 214, 214, 213, 214, 213, 212, 212, 212, 212, 212, 211, 212, 214, 213, 212, 212, 212, 213, 212, 211, 211, 212, 212, 211, 212, 212, 212, 213, 213, 213, 213, 214, 214, 214, 213, 214, 215, 214, 214, 214, 216, 213, 213, 212, 213, 214, 214, 214, 213, 213, 213, 214, 214, 214, 213, 213, 213, 213, 212, 211, 212, 211, 214, 214, 213, 213, 213, 213, 213, 214, 215, 215, 214, 214, 212, 213, 213, 211, 212, 213, 212, 212, 212, 212, 212, 213, 213, 213, 212, 212, 213, 213, 213, 213])
     far_corner_black_ir_readings_towards['back_right'] = np.array([206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 207, 207, 207, 207, 207, 207, 207, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 207, 207, 207, 207, 207, 207, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 205, 205, 205, 205, 205, 205, 205, 205, 205, 205, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 207, 207, 207, 207, 207, 207, 207, 207, 207, 206, 206, 206, 206, 206, 206, 206, 207, 207, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 207, 207, 207, 207, 207, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 206, 207, 207, 207, 207, 207, 206, 206, 206, 207, 207, 206, 206, 206])
     analyze_IR_readings("far_corner_black_ir_readings_towards", far_corner_black_ir_readings_towards)
+
+def ir_field_test2():
+    white_ir_readings = {}
+    white_ir_readings['front_left'] = np.array()
+    white_ir_readings['front_right'] = np.array()
+    white_ir_readings['back_left'] = np.array()
+    white_ir_readings['back_right'] = np.array()
+    analyze_IR_readings("white_ir_readings", white_ir_readings)
+
+    black_ir_readings = {}
+    black_ir_readings['front_left'] = np.array()
+    black_ir_readings['front_right'] = np.array()
+    black_ir_readings['back_left'] = np.array()
+    black_ir_readings['back_right'] = np.array()
+    analyze_IR_readings("black_ir_readings", black_ir_readings)
+
+    far_corner_black_ir_readings = {}
+    far_corner_black_ir_readings['front_left'] = np.array()
+    far_corner_black_ir_readings['front_right'] = np.array()
+    far_corner_black_ir_readings['back_left'] = np.array()
+    far_corner_black_ir_readings['back_right'] = np.array()
+    analyze_IR_readings("far_corner_black_ir_readings", far_corner_black_ir_readings)
+
+    near_corner_black_ir_readings = {}
+    near_corner_black_ir_readings['front_left'] = np.array()
+    near_corner_black_ir_readings['front_right'] = np.array()
+    near_corner_black_ir_readings['back_left'] = np.array()
+    near_corner_black_ir_readings['back_right'] = np.array()
+    analyze_IR_readings("near_corner_black_ir_readings", near_corner_black_ir_readings)
+
+    far_corner_white_ir_readings = {}
+    far_corner_white_ir_readings['front_left'] = np.array()
+    far_corner_white_ir_readings['front_right'] = np.array()
+    far_corner_white_ir_readings['back_left'] = np.array()
+    far_corner_white_ir_readings['back_right'] = np.array()
+    analyze_IR_readings("far_corner_white_ir_readings", far_corner_white_ir_readings)
+
+    near_corner_white_ir_readings = {}
+    near_corner_white_ir_readings['front_left'] = np.array()
+    near_corner_white_ir_readings['front_right'] = np.array()
+    near_corner_white_ir_readings['back_left'] = np.array()
+    near_corner_white_ir_readings['back_right'] = np.array()
+    analyze_IR_readings("near_corner_white_ir_readings", near_corner_white_ir_readings)
+
+
+
+if __name__ == "__main__":
+    ir_field_test2()
