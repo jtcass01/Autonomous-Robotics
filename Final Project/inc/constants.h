@@ -28,19 +28,19 @@
 #define A_FRONT_SONAR_MIN                     0
 #define A_FRONT_SONAR_COLLISION_THRESHOLD_CM  15
 /// Front Left
-#define A_FRONT_LEFT_IR                       2
+#define A_FRONT_LEFT_IR                       0
 #define A_FRONT_LEFT_IR_MAX                   4092
 #define A_FRONT_LEFT_IR_MIN                   0
 /// Front Right
-#define A_FRONT_RIGHT_IR                      3
+#define A_FRONT_RIGHT_IR                      1
 #define A_FRONT_RIGHT_IR_MAX                  4092
 #define A_FRONT_RIGHT_IR_MIN                  0
 /// Back Left
-#define A_BACK_LEFT_IR                        4
+#define A_BACK_LEFT_IR                        2
 #define A_BACK_LEFT_IR_MAX                    4092
 #define A_BACK_LEFT_IR_MIN                    0
 /// Back Right
-#define A_BACK_RIGHT_IR                       5
+#define A_BACK_RIGHT_IR                       3
 #define A_BACK_RIGHT_IR_MAX                   4092
 #define A_BACK_RIGHT_IR_MIN                   0
 

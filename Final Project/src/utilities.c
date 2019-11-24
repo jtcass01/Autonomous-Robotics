@@ -14,12 +14,13 @@ int bind(int value, int lowerBound, int upperBound) {
 void printData(char *dataLabel, int *data, int dataSize) {
     printf("%s : [", dataLabel);
     int dataIndex = 0;
-    while(++dataIndex < dataSize) {
-        if(dataIndex < dataSize) {
+    while(dataIndex < dataSize) {
+        if(dataIndex < dataSize-1) {
 	        printf("%d, ", data[dataIndex]);
         } else {
 	        printf("%d", data[dataIndex]);
         }
+        dataIndex++;
     }
     printf("]\n");
 }

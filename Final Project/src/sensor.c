@@ -54,6 +54,31 @@ void ReportCameraPosition(int channelNumber) {
   camera_close();
 }
 
+void ReportIRSensors(void) {
+  int frontLeftReadings[TEST_DATA_ARRAY_SIZE] = {0};
+  int frontRightReadings[TEST_DATA_ARRAY_SIZE] = {0};
+  int backLeftReadings[TEST_DATA_ARRAY_SIZE] = {0};
+  int backRightReadings[TEST_DATA_ARRAY_SIZE] = {0};
+  int ix = 0;
+
+  while(ix < TEST_DATA_ARRAY_SIZE) {
+    frontLeftReadings[ix] = analog(A_FRONT_LEFT_IR);
+    frontRightReadings[ix] = analog(A_FRONT_RIGHT_IR);
+    backLeftReadings[ix] = analog(A_BACK_LEFT_IR);
+    backRightReadings[ix] = analog(A_BACK_RIGHT_IR);
+
+    printf("front left: {}  |  front right: {}  |  back left: {}  |  back right: {}", frontLeftReadings[ix], frontRightReadings[ix], backLeftReadings[ix], backRightReadings[ix]);
+
+    ix++;
+    wait_for_milliseconds(100);
+  }
+
+  printData("front left", frontLeftReadings, TEST_DATA_ARRAY_SIZE);
+  printData("front right", frontRightReadings, TEST_DATA_ARRAY_SIZE);
+  printData("back left", backLeftReadings, TEST_DATA_ARRAY_SIZE);
+  printData("back right", backRightReadings, TEST_DATA_ARRAY_SIZE);
+}
+
 int ConvertFrontSonarReadingToCM(int sensorReading) {
   int result = (int) (((float) sensorReading - 42.0747619) / 2.96188645);
 

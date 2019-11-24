@@ -2,25 +2,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-"""
-top_left run ouput
+def display_stats(label, values):
+    print("{}, average = {}, standard deviation = {}, min = {}, max = {}".format(label, values.mean(), values.std(), min(values), max(values)))
 
-xReadings : [62, 62, 62, 60, 62, 61, 61, 62, 62, 60, 60, 62, 62, 60, 61, 62, 60, 60, 61, 62, 60, 60, 60, 61, 62, 61, 60, 61, 61, 62, 60, 61, 62, 61, 60, 61, 60, 61, 60, 64, 61, 62, 62, 61, 62, 60, 62, 61, 61, 61, 60, 60, 42, 60, 62, 62, 61, 60, 61, 61, 61, 61, 60, 60, 62, 60, 61, 61, 61, 60, 62, 61, 60, 62, 61, 62, 60, 60, 62, 60, 46, 47, 84, 57, 61, 60, 61, 60, 60, 60, 60, 62, 62, 60, 60, 60, 61, 61, 61, 61, 60, 62, 61, 62, 60, 61, 60, 61, 62, 62, 62, 62, 61, 62, 62, 60, 62, 120, 61, 62, 61, 60, 61, 62, 60, 60, 60, 62, 60, 60, 61, 61, 60, 60, 60, 62, 60, 60, 60, 62, 61, 60, 62, 60, 60, 60, 61, 60, 60, 61, 2]
-xRAReadings : [62, 62, 62, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 61, 61, 60, 61, 61, 61, 61, 60, 60, 60, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 60, 58, 57, 58, 58, 58, 58, 58, 61, 61, 61, 60, 60, 60, 60, 60, 60, 60, 60, 61, 60, 60, 61, 61, 61, 61, 60, 61, 61, 58, 56, 59, 59, 59, 59, 59, 61, 63, 59, 60, 62, 62, 61, 61, 60, 60, 60, 60, 60, 60, 60, 61, 61, 61, 61, 60, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 69, 69, 69, 69, 69, 69, 69, 61, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 81]
-yReadings : [81, 80, 81, 81, 81, 81, 81, 81, 81, 81, 81, 80, 81, 80, 81, 81, 80, 81, 81, 81, 81, 80, 80, 81, 81, 81, 81, 81, 81, 80, 81, 80, 81, 81, 79, 81, 81, 81, 81, 87, 81, 81, 81, 81, 80, 80, 80, 81, 80, 81, 80, 80, 79, 81, 81, 80, 81, 81, 80, 81, 81, 79, 81, 81, 81, 81, 81, 81, 81, 81, 80, 80, 81, 81, 81, 80, 81, 80, 81, 81, 87, 77, 1, 81, 81, 81, 81, 81, 81, 80, 80, 81, 81, 81, 81, 81, 80, 81, 80, 80, 80, 81, 80, 81, 81, 81, 81, 81, 81, 81, 80, 81, 80, 81, 81, 80, 81, 115, 81, 81, 81, 81, 81, 80, 81, 81, 81, 81, 81, 80, 81, 81, 80, 81, 81, 80, 80, 81, 81, 80, 77, 81, 81, 81, 81, 81, 80, 81, 81, 81, 62]
-yRAReadings : [81, 80, 80, 80, 80, 80, 80, 80, 81, 81, 81, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 81, 81, 81, 81, 81, 81, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 81, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 81, 69, 69, 69, 69, 69, 69, 69, 80, 80, 81, 81, 81, 81, 81, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 80, 80, 80, 80, 80, 80, 80, 85, 85, 85, 85, 85, 85, 85, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 62]
+def plot_IR_readings(area, IR_Readings):
+    time_values = range(0, len(IR_Readings['front_left'])*0.1, 0.1)
 
-"""
-def top_left():
-    print("Top Left")
-    x = np.array([62, 62, 62, 60, 62, 61, 61, 62, 62, 60, 60, 62, 62, 60, 61, 62, 60, 60, 61, 62, 60, 60, 60, 61, 62, 61, 60, 61, 61, 62, 60, 61, 62, 61, 60, 61, 60, 61, 60, 64, 61, 62, 62, 61, 62, 60, 62, 61, 61, 61, 60, 60, 42, 60, 62, 62, 61, 60, 61, 61, 61, 61, 60, 60, 62, 60, 61, 61, 61, 60, 62, 61, 60, 62, 61, 62, 60, 60, 62, 60, 46, 47, 84, 57, 61, 60, 61, 60, 60, 60, 60, 62, 62, 60, 60, 60, 61, 61, 61, 61, 60, 62, 61, 62, 60, 61, 60, 61, 62, 62, 62, 62, 61, 62, 62, 60, 62, 120, 61, 62, 61, 60, 61, 62, 60, 60, 60, 62, 60, 60, 61, 61, 60, 60, 60, 62, 60, 60, 60, 62, 61, 60, 62, 60, 60, 60, 61, 60, 60, 61])
-    xRA = np.array([62, 62, 62, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 61, 61, 60, 61, 61, 61, 61, 60, 60, 60, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 60, 58, 57, 58, 58, 58, 58, 58, 61, 61, 61, 60, 60, 60, 60, 60, 60, 60, 60, 61, 60, 60, 61, 61, 61, 61, 60, 61, 61, 58, 56, 59, 59, 59, 59, 59, 61, 63, 59, 60, 62, 62, 61, 61, 60, 60, 60, 60, 60, 60, 60, 61, 61, 61, 61, 60, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 69, 69, 69, 69, 69, 69, 69, 61, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60])
-    y = np.array([81, 80, 81, 81, 81, 81, 81, 81, 81, 81, 81, 80, 81, 80, 81, 81, 80, 81, 81, 81, 81, 80, 80, 81, 81, 81, 81, 81, 81, 80, 81, 80, 81, 81, 79, 81, 81, 81, 81, 87, 81, 81, 81, 81, 80, 80, 80, 81, 80, 81, 80, 80, 79, 81, 81, 80, 81, 81, 80, 81, 81, 79, 81, 81, 81, 81, 81, 81, 81, 81, 80, 80, 81, 81, 81, 80, 81, 80, 81, 81, 87, 77, 1, 81, 81, 81, 81, 81, 81, 80, 80, 81, 81, 81, 81, 81, 80, 81, 80, 80, 80, 81, 80, 81, 81, 81, 81, 81, 81, 81, 80, 81, 80, 81, 81, 80, 81, 115, 81, 81, 81, 81, 81, 80, 81, 81, 81, 81, 81, 80, 81, 81, 80, 81, 81, 80, 80, 81, 81, 80, 77, 81, 81, 81, 81, 81, 80, 81, 81, 81])
-    yRA = np.array([81, 80, 80, 80, 80, 80, 80, 80, 81, 81, 81, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 81, 81, 81, 81, 81, 81, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 81, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 81, 69, 69, 69, 69, 69, 69, 69, 80, 80, 81, 81, 81, 81, 81, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 80, 80, 80, 80, 80, 80, 80, 85, 85, 85, 85, 85, 85, 85, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80])
-    print("x, average = {}, standard deviation = {}, min = {}, max = {}".format(x.mean(), x.std(), min(x), max(x)))
-    print("xRa, average = {}, standard deviation = {}, min = {}, max = {}".format(xRA.mean(), xRA.std(), min(xRA), max(xRA)))
-    print("y, average = {}, standard deviation = {}, min = {}, max = {}".format(y.mean(), y.std(), min(y), max(y)))
-    print("yRa, average = {}, standard deviation = {}, min = {}, max = {}".format(yRA.mean(), yRA.std(), min(yRA), max(yRA)))
+    plt.scatter(time_values, IR_Readings['front_left'], c='blue', label='front_left')
+    plt.scatter(time_values, IR_Readings['front_right'], c='black', label='front_right')
+    plt.scatter(time_values, IR_Readings['back_left'], c='green', label='back_left')
+    plt.scatter(time_values, IR_Readings['back_right'], c='red', label='back_right')
+    plt.xlabel('time (s)')
+    plt.ylabel('sensor response')
+    plt.label(area + " IR Readings")
+    plt.legend()
+    plt.show()
+
+def analyze_IR_readings(area, IR_Readings):
+    for ir_sensor in IR_Readings:
+        display_stats(ir_sensor, IR_Readings[ir_sensor])
+
+    plot_IR_readings(area, IR_Readings)
 
 def linear_fit(distance_readings_tuples, min_linear_distance = 4):
     scatter_distances = None
@@ -107,4 +109,75 @@ if __name__ == "__main__":
         (30, [1017, 1015, 1018, 1009, 1008, 1017, 1014, 1014, 1012, 1014, 1012, 1017, 1020, 1019, 1014, 1012, 1017, 1013, 1012, 1013, 1012, 1014, 1011, 1003, 1012, 1021, 1022, 1009, 1024, 1020, 1013, 1011, 1013, 1005, 1014, 1010, 1027, 1008, 1014, 1012, 1012, 1019, 1011, 1016, 1002, 1018, 1016, 1001, 1005, 1012, 1008, 1022, 1009, 1010, 1017, 1006, 1019, 1024, 1020, 1009, 1004, 1013, 1004, 1015, 1016, 1014, 1010, 1003, 1005, 1014, 1022, 1039, 1018, 1015, 1015, 1016, 1016, 1008, 1013, 1023, 1015, 1011, 1018, 1006, 1010, 1006, 1012, 1019, 1012, 1017, 1020, 1011, 1015, 1015, 1011, 1016, 1017, 1013, 1011, 1016, 1011, 1011, 1023, 1030, 1011, 1005, 1009, 1011, 1010, 1014, 1015, 1002, 1020, 1013, 1011, 1018, 1020, 1018, 1011, 1010, 1018, 1016, 1013, 1008, 1008, 1015, 1011, 1015, 1022, 1014, 1012, 1022, 1027, 1007, 1009, 1013, 1016, 1004, 1008, 1015, 1012, 1018, 1013, 1014, 1015, 1016, 1013, 1014, 1014, 1005]),
     ]
 
-    linear_fit(left_lidar_readings, min_linear_distance=10)
+#    linear_fit(left_lidar_readings, min_linear_distance=10)
+#    linear_fit(front_sonar_readings, min_linear_distance=6)
+    white_ir_readings = {}
+    white_ir_readings['front_left'] = np.array()
+    white_ir_readings['front_right'] = np.array()
+    white_ir_readings['back_left'] = np.array()
+    white_ir_readings['back_right'] = np.array()
+
+    black_ir_readings = {}
+    black_ir_readings['front_left'] = np.array()
+    black_ir_readings['front_right'] = np.array()
+    black_ir_readings['back_left'] = np.array()
+    black_ir_readings['back_right'] = np.array()
+
+    parallel_white_ir_readings = {}
+    parallel_white_ir_readings['front_left'] = np.array()
+    parallel_white_ir_readings['front_right'] = np.array()
+    parallel_white_ir_readings['back_left'] = np.array()
+    parallel_white_ir_readings['back_right'] = np.array()
+
+    perpendicular_white_ir_readings = {}
+    perpendicular_white_ir_readings['front_left'] = np.array()
+    perpendicular_white_ir_readings['front_right'] = np.array()
+    perpendicular_white_ir_readings['back_left'] = np.array()
+    perpendicular_white_ir_readings['back_right'] = np.array()
+
+    near_corner_white_ir_readings = {}
+    near_corner_white_ir_readings['front_left'] = np.array()
+    near_corner_white_ir_readings['front_right'] = np.array()
+    near_corner_white_ir_readings['back_left'] = np.array()
+    near_corner_white_ir_readings['back_right'] = np.array()
+
+    far_corner_white_ir_readings = {}
+    far_corner_white_ir_readings['front_left'] = np.array()
+    far_corner_white_ir_readings['front_right'] = np.array()
+    far_corner_white_ir_readings['back_left'] = np.array()
+    far_corner_white_ir_readings['back_right'] = np.array()
+
+    parrallel_black_ir_readings = {}
+    parrallel_black_ir_readings['front_left'] = np.array()
+    parrallel_black_ir_readings['front_right'] = np.array()
+    parrallel_black_ir_readings['back_left'] = np.array()
+    parrallel_black_ir_readings['back_right'] = np.array()
+
+    perpendicular_black_ir_readings = {}
+    perpendicular_black_ir_readings['front_left'] = np.array()
+    perpendicular_black_ir_readings['front_right'] = np.array()
+    perpendicular_black_ir_readings['back_left'] = np.array()
+    perpendicular_black_ir_readings['back_right'] = np.array()
+
+    near_corner_black_ir_readings = {}
+    near_corner_black_ir_readings['front_left'] = np.array()
+    near_corner_black_ir_readings['front_right'] = np.array()
+    near_corner_black_ir_readings['back_left'] = np.array()
+    near_corner_black_ir_readings['back_right'] = np.array()
+
+    far_corner_black_ir_readings = {}
+    far_corner_black_ir_readings['front_left'] = np.array()
+    far_corner_black_ir_readings['front_right'] = np.array()
+    far_corner_black_ir_readings['back_left'] = np.array()
+    far_corner_black_ir_readings['back_right'] = np.array()
+
+    analyze_IR_readings(white_ir_readings)
+    analyze_IR_readings(black_ir_readings)
+    analyze_IR_readings(parallel_white_ir_readings)
+    analyze_IR_readings(perpendicular_white_ir_readings)
+    analyze_IR_readings(near_corner_white_ir_readings)
+    analyze_IR_readings(far_corner_white_ir_readings)
+    analyze_IR_readings(parrallel_black_ir_readings)
+    analyze_IR_readings(perpendicular_black_ir_readings)
+    analyze_IR_readings(near_corner_black_ir_readings)
+    analyze_IR_readings(far_corner_black_ir_readings)

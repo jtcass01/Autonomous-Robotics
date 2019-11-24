@@ -28,7 +28,7 @@ void DriveThread(void) {
   int leftMotorPower = 0;
   int rightMotorPower = 0;
   int objectCount = 0;
-  int leftLook = 0;
+  int leftLook = 1;
   float time_passed = 0.0;
 
   // Open a connection with the camera.
@@ -92,6 +92,18 @@ void DriveThread(void) {
                 printf("Object color is not recognized.\n");
                 gv_objectColor = OBJECT_COLOR_INVALID;
               }
+
+              if (time_passed == 1) {
+                // pan right
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 1000, 750);
+              } else if (time_passed == 2) {
+                // pan left
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, 750, 1000);
+              } else if (time_passed == 3) {
+                // pan back center
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 1000, 750);
+              }
+
             } else {
               printf("No QR Code found.\n");
             }
@@ -110,16 +122,12 @@ void DriveThread(void) {
               printf("Turning left.\n");
               turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
 
-              // Drive forward for 0.25s
-              printf("Driving fowards for 0.25s.\n");
-              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 250, 1000, 1000);
-
               printf("Turning right.\n");
               turnRight(LEFT_MOTOR, RIGHT_MOTOR);
 
               // Drive forward for 1s
               printf("Driving fowards for 0.5s.\n");
-              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 500, 1000, 1000);
+              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, 1000, 1000);
 
               leftLook = 0;
             } else {
@@ -130,16 +138,12 @@ void DriveThread(void) {
               printf("Turning right.\n");
               turnRight(LEFT_MOTOR, RIGHT_MOTOR);
 
-              // Drive forward for 0.25s
-              printf("Driving fowards for 0.25s.\n");
-              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 250, 1000, 1000);
-
               printf("Turning left.\n");
               turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
 
               // Drive forward for 1s
-              printf("Driving fowards for 1s.\n");
-              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 500, 1000, 1000);
+              printf("Driving fowards for 0.5s.\n");
+              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, 1000, 1000);
 
               leftLook = 1;
             }
@@ -152,12 +156,6 @@ void DriveThread(void) {
         // Drive back for 1s
         printf("Driving backwards for 1.5s.\n");
         goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 1500, -1000, -1000);
-
-        printf("Turning around.\n");
-        turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
-        wait_for_milliseconds(100);
-        turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
-
         break;
 
       case ROBOT_STATE_SEARCHING_FOR_OBJECT:
@@ -173,7 +171,8 @@ void DriveThread(void) {
           ao();
           gv_robotState = ROBOT_STATE_APPROACHING_OBJECT;
         } else {
-          printf("Need to implement roaming logic.\n");
+          printf("Roaming. Performing circle until object is found");
+          goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 150, 1000);
         }
         break;
       case ROBOT_STATE_APPROACHING_OBJECT:
@@ -231,9 +230,9 @@ void ButtonThread(void) {
 
     if (gv_robotState == ROBOT_STATE_READING_QR) {
       if ((frontLeftButtonReading || frontRightButtonReading) && firstPress == 0) {
-        firstPress += 1;
         gv_dealingWithButton = 1;
-        wait_for_milliseconds(100);
+        firstPress += 1;
+        wait_for_milliseconds(1000);
         gv_dealingWithButton = 0;
       }
     } else {

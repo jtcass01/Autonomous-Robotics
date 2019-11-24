@@ -42,10 +42,10 @@ void goStraightMav(int leftMotor, int rightMotor, int millisecond_t, int velocit
 void make90Turn(int leftMotor, int rightMotor, int leftTurn, int velocity) {
     if(leftTurn) {
         /// Turn 90 degress Left
-        goDemobotMav(leftMotor, rightMotor, 1600, 0, velocity);
+        goDemobotMav(leftMotor, rightMotor, 1650, 0, velocity);
     } else {
 	    /// Turn 90 degrees Right
-        goDemobotMav(leftMotor, rightMotor, 1600, velocity, 0);
+        goDemobotMav(leftMotor, rightMotor, 1590, velocity, 0);
     }
 }
 
