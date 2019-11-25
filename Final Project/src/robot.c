@@ -63,8 +63,8 @@ void DriveThread(void) {
         turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
 
         // go straight for 1 second
-        printf("going straight for 1.5 second\n");
-        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 1500, 1000, 1000);
+        printf("going straight for 1.35 second\n");
+        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 1350, 1000, 1000);
 
         // Read QR code
         while(gv_objectColor == OBJECT_COLOR_INVALID) {
@@ -92,20 +92,20 @@ void DriveThread(void) {
                 printf("Object color is not recognized.\n");
                 gv_objectColor = OBJECT_COLOR_INVALID;
               }
-
-              if (time_passed == 1) {
-                // pan right
-                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 1000, 750);
-              } else if (time_passed == 2) {
-                // pan left
-                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, 750, 1000);
-              } else if (time_passed == 3) {
-                // pan back center
-                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 1000, 750);
-              }
-
             } else {
               printf("No QR Code found.\n");
+              if (time_passed < 0.6) {
+                // pan right
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 100, -100);
+              } else if (time_passed < 1.8) {
+                // pan left
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, -100, 100);
+              } else if (time_passed < 2.4) {
+                // pan back center
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 100, -100);
+              } else {
+                ao();
+              }
             }
             wait_for_milliseconds(100);
             time_passed += 0.1;
@@ -126,7 +126,7 @@ void DriveThread(void) {
               turnRight(LEFT_MOTOR, RIGHT_MOTOR);
 
               // Drive forward for 1s
-              printf("Driving fowards for 0.5s.\n");
+              printf("Driving fowards for 0.2s.\n");
               goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, 1000, 1000);
 
               leftLook = 0;
@@ -142,7 +142,7 @@ void DriveThread(void) {
               turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
 
               // Drive forward for 1s
-              printf("Driving fowards for 0.5s.\n");
+              printf("Driving fowards for 0.2s.\n");
               goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, 1000, 1000);
 
               leftLook = 1;
@@ -156,6 +156,14 @@ void DriveThread(void) {
         // Drive back for 1s
         printf("Driving backwards for 1.5s.\n");
         goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 1500, -1000, -1000);
+
+        // turn left
+        printf("Turning left.\n");
+        turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
+
+        // Drive forward .3 second
+        printf("Driving fowards for 0.3s.\n");
+        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, 1000, 1000);
         break;
 
       case ROBOT_STATE_SEARCHING_FOR_OBJECT:
@@ -172,7 +180,7 @@ void DriveThread(void) {
           gv_robotState = ROBOT_STATE_APPROACHING_OBJECT;
         } else {
           printf("Roaming. Performing circle until object is found");
-          goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 150, 1000);
+          goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, -1000, 1000);
         }
         break;
       case ROBOT_STATE_APPROACHING_OBJECT:
@@ -205,6 +213,7 @@ void DriveThread(void) {
         break;
       case ROBOT_STATE_APPROACHING_GOAL:
         printf("ROBOT_STATE_APPROACHING_GOAL\n");
+        align_by_analog_sensors(LEFT_MOTOR, RIGHT_MOTOR, A_FRONT_LEFT_IR, A_FRONT_RIGHT_IR, 10);
         break;
       case ROBOT_STATE_PLACING_OBJECT:
         printf("ROBOT_STATE_PLACING_OBJECT\n");

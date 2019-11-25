@@ -3,38 +3,26 @@
 void LassoThread(void) {
   while (1) {
     if ( gv_lassoState == LASSO_STATE_DOWN ) {
-      LowerLasso();
-
-      gv_lassoState = LASSO_STATE_WAITING;
+      MoveLasso(LASSO_DOWN_ENCODER);
     } else if ( gv_lassoState == LASSO_STATE_UP ) {
-      RaiseLasso();
-
-      gv_lassoState = LASSO_STATE_WAITING;
+      MoveLasso(LASSO_UP_ENCODER);
     } else {
       wait_for_milliseconds(200);
     }
   }
 }
 
-void LowerLasso(void) {
+
+void MoveLasso(int encoderPosition) {
   enable_servos();
 
-  set_servo_position(LASSO_SERVO, LASSO_DOWN_ENCODER);
-  msleep(1000);
-
-  disable_servos();
-}
-
-void RaiseLasso(void) {
-  enable_servos();
-
-  set_servo_position(LASSO_SERVO, LASSO_UP_ENCODER);
+  set_servo_position(LASSO_SERVO, encoderPosition);
   msleep(1000);
 
   disable_servos();
 }
 
 void LassoTest(void) {
-  LowerLasso();
-  RaiseLasso();
+  MoveLasso(LASSO_DOWN_ENCODER);
+  MoveLasso(LASSO_UP_ENCODER);
 }

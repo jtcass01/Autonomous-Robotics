@@ -21,6 +21,23 @@ void goDemobotMav(int leftMotor, int rightMotor, int millisecond_t, int leftVelo
   ao();
 }
 
+void align_by_analog_sensors(int leftMotor, int rightMotor, int sensorControl1, int sensorControl2, int align_tolerance) {
+//  int sensorResponse1 = NormalizeSensorReading(analog(sensorControl1), 170, 250);
+//  int sensorResponse2 = NormalizeSensorReading(analog(sensorControl2), 180, 250);
+  int sensorResponse1 = analog(sensorControl1);
+  int sensorResponse2 = analog(sensorControl2);
+
+  printf("SensorResponse1 = %d  ||  SensorResponse2 = %d", sensorResponse1, sensorResponse2);
+
+  while( sensorResponse1 != sensorResponse2 ) {
+    goDemobotMav(leftMotor, rightMotor, 100, -1000, 1000);
+
+    sensorResponse1 = analog(sensorControl1);
+    sensorResponse2 = analog(sensorControl2);
+    printf("SensorResponse1 = %d  ||  SensorResponse2 = %d", sensorResponse1, sensorResponse2);
+  }
+}
+
 void goStraight(int leftMotor, int rightMotor, int millisecond_t, int powerLevel) {
     goDemobot(leftMotor, rightMotor, millisecond_t, powerLevel, powerLevel);
 }
@@ -42,7 +59,7 @@ void goStraightMav(int leftMotor, int rightMotor, int millisecond_t, int velocit
 void make90Turn(int leftMotor, int rightMotor, int leftTurn, int velocity) {
     if(leftTurn) {
         /// Turn 90 degress Left
-        goDemobotMav(leftMotor, rightMotor, 1650, 0, velocity);
+        goDemobotMav(leftMotor, rightMotor, 1700, 0, velocity);
     } else {
 	    /// Turn 90 degrees Right
         goDemobotMav(leftMotor, rightMotor, 1590, velocity, 0);

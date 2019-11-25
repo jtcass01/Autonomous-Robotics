@@ -3,10 +3,11 @@
 
 #include <kipr/botball.h>
 #include "globals.h"
+#include "constants.h"
+
 
 void LassoThread(void);
-void LowerLasso(void);
-void RaiseLasso(void);
+void MoveLasso(int encoderPosition);
 void LassoTest(void);
 
 #endif

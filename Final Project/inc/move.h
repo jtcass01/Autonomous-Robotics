@@ -3,10 +3,13 @@
 #define ROBO_MOVE_H
 
 #include <kipr/botball.h>
+#include "sensor.h"
+
 
 void goDemobot(int leftMotor, int rightMotor, int millisecond_t, int powerLevel_l, int powerLevel_r); // function prototype
 void demoMotor(int leftMotor, int rightMotor, int leftMotorPower, int rightMotorPower);
 void goDemobotMav(int leftMotor, int rightMotor, int millisecond_t, int leftVelocity, int rightVelocity);
+void align_by_analog_sensors(int leftMotor, int rightMotor, int sensorControl1, int sensorControl2, int align_tolerance);
 void goStraight(int leftMotor, int rightMotor, int millisecond_t, int powerLevel);
 void goStraightMrp(int leftMotor, int rightMotor, int velocity, int numberOfTicks);
 void goStraightMav(int leftMotor, int rightMotor, int millisecond_t, int velocity);

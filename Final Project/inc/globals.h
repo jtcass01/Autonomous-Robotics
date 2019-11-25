@@ -33,10 +33,17 @@ typedef enum {
   OBJECT_COLOR_PURPLE = 3,
 } OBJECT_COLOR;
 
+typedef enum {
+  HOME_BASE_INVALID = 0,
+  HOME_BASE_WHITE = 1,
+  HOME_BASE_BLACK = 2
+} HOME_BASE;
+
 // Global variables
 extern ROBOT_STATE gv_robotState;
 extern LASSO_STATE gv_lassoState;
 extern OBJECT_COLOR gv_objectColor;
+extern HOME_BASE gv_homeBase;
 extern int gv_dealingWithButton;
 
 #endif
