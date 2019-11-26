@@ -55,38 +55,32 @@ void ReportCameraPosition(int channelNumber) {
 }
 
 void ReportIRSensors(void) {
-  int frontLeftReadings[TEST_DATA_ARRAY_SIZE] = {0};
-  int frontRightReadings[TEST_DATA_ARRAY_SIZE] = {0};
+  int frontReadings[TEST_DATA_ARRAY_SIZE] = {0};
   int ix = 0;
 
   while(ix < TEST_DATA_ARRAY_SIZE) {
-    frontLeftReadings[ix] = analog(A_FRONT_LEFT_IR);
-    frontRightReadings[ix] = analog(A_FRONT_RIGHT_IR);
+    frontReadings[ix] = analog(A_FRONT_IR);
 
-    printf("front left: %d  |  front right: %d\n", frontLeftReadings[ix], frontRightReadings[ix]);
+    printf("front ir: %d\n", frontReadings[ix]);
 
     ix++;
     wait_for_milliseconds(100);
   }
 
-  printData("front left", frontLeftReadings, TEST_DATA_ARRAY_SIZE);
-  printData("front right", frontRightReadings, TEST_DATA_ARRAY_SIZE);
+  printData("front ir", frontReadings, TEST_DATA_ARRAY_SIZE);
 }
 
 void ReportNormalizedIRSensors(void) {
-  int frontLeftReading = 0;
-  int frontRightReading = 0;
+  int frontReading = 0;
 
   while(1) {
     if(gv_homeBase == HOME_BASE_WHITE) {
-      frontLeftReading = NormalizeSensorReading(analog(A_FRONT_LEFT_IR), A_FRONT_LEFT_IR_WHITE_MIN, A_FRONT_LEFT_IR_WHITE_MAX);
-      frontRightReading = NormalizeSensorReading(analog(A_FRONT_RIGHT_IR), A_FRONT_RIGHT_IR_WHITE_MIN, A_FRONT_RIGHT_IR_WHITE_MAX);
+      frontReading = NormalizeSensorReading(analog(A_FRONT_IR), A_FRONT_IR_WHITE_MIN, A_FRONT_IR_WHITE_MAX);
     } else if (gv_homeBase == HOME_BASE_BLACK) {
-      frontLeftReading = NormalizeSensorReading(analog(A_FRONT_LEFT_IR), A_FRONT_LEFT_IR_BLACK_MIN, A_FRONT_LEFT_IR_BLACK_MAX);
-      frontRightReading = NormalizeSensorReading(analog(A_FRONT_RIGHT_IR), A_FRONT_RIGHT_IR_BLACK_MIN, A_FRONT_RIGHT_IR_BLACK_MAX);
+      frontReading = NormalizeSensorReading(analog(A_FRONT_IR), A_FRONT_IR_BLACK_MIN, A_FRONT_IR_BLACK_MAX);
     }
 
-    printf("front left: %d  |  front right: %d\n", frontLeftReading, frontRightReading);
+    printf("front ir: %d\n", frontReading);
     wait_for_milliseconds(100);
   }
 }

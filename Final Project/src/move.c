@@ -38,6 +38,35 @@ void align_by_analog_sensors(int leftMotor, int rightMotor, int sensorControl1, 
   }
 }
 
+void SpinForIRReadings(int *readingArray, int numberOfReadings) {
+  int index = 0;
+  while(index < numberOfReadings) {
+    readingArray[index] = analog(A_FRONT_IR);
+    goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 3, -800, 800);
+    index += 1;
+  }
+}
+
+void SpinUntilIRReading(int goalValue) {
+  int frontReading = analog(A_FRONT_IR);
+
+  printf("Spinning until reading of %d is found.\n", goalValue);
+  while(frontReading < goalValue) {
+    frontReading = analog(A_FRONT_IR);
+    printf("IR Reading %d | goal value %d\n", frontReading, goalValue);
+    goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 3, -800, 800);
+  }
+}
+
+void spin180(int leftMotor, int rightMotor, int clockwise) {
+  if (clockwise) {
+    goDemobotMav(leftMotor, rightMotor, 1150, 1000, -1000);
+  } else {
+    goDemobotMav(leftMotor, rightMotor, 1150, -1000, 1000);
+  }
+  ao();
+}
+
 void goStraight(int leftMotor, int rightMotor, int millisecond_t, int powerLevel) {
     goDemobot(leftMotor, rightMotor, millisecond_t, powerLevel, powerLevel);
 }
@@ -67,13 +96,23 @@ void make90Turn(int leftMotor, int rightMotor, int leftTurn, int velocity) {
 }
 
 void turnLeft(int leftMotor, int rightMotor) {
-    // Turn left
+  // Turn left
 	make90Turn(leftMotor, rightMotor, 1, 750);
 }
 
 void turnRight(int leftMotor, int rightMotor) {
-    // Turn right
+  // Turn right
 	make90Turn(leftMotor, rightMotor, 0, 750);
+}
+
+void reverseLeftTurn(int leftMotor, int rightMotor) {
+  // Turn left
+  make90Turn(leftMotor, rightMotor, 0, -750);
+}
+
+void reverseRightTurn(int leftMotor, int rightMotor) {
+  // Turn left
+  make90Turn(leftMotor, rightMotor, 1, -750);
 }
 
 void driftLeftMav(int leftMotor, int rightMotor, int millisecond_t, int velocity) {

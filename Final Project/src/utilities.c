@@ -25,6 +25,23 @@ void printData(char *dataLabel, int *data, int dataSize) {
     printf("]\n");
 }
 
+void BubbleSort(int *array, int array_size) {
+  int i = 0;
+  int j = 0;
+  int temp = 0;
+
+  for (i = 0; i < array_size - 1; i++) {
+    for (j = 0; j < array_size - i - 1; j++) {
+      if (array[j] > array[j+1]) {
+        // swap indices
+        temp = array[j];
+        array[j] = array[j+1];
+        array[j+1] = temp;
+      }
+    }
+  }
+}
+
 int NormalizeSensorReading(int sensorValue, int minSensorValue, int maxSensorValue) {
     // Apply transform
     int output = 100 - ((sensorValue - maxSensorValue) * 100) / (minSensorValue - maxSensorValue);

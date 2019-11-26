@@ -8,6 +8,6 @@ HOME_BASE gv_homeBase = HOME_BASE_BLACK;
 int gv_dealingWithButton = 0;
 
 int main() {
-  Demo();
+  spin180(LEFT_MOTOR, RIGHT_MOTOR, 0);
   return 0;
 }
