@@ -11,7 +11,7 @@ void demoMotor(int leftMotor, int rightMotor, int leftMotorPower, int rightMotor
 void goDemobotMav(int leftMotor, int rightMotor, int millisecond_t, int leftVelocity, int rightVelocity);
 void align_by_analog_sensors(int leftMotor, int rightMotor, int sensorControl1, int sensorControl2, int align_tolerance);
 void SpinForIRReadings(int *readingArray, int numberOfReadings);
-void SpinUntilIRReading(int goalValue);
+void SpinUntilIRReading(int goalValue, int);
 void spin180(int leftMotor, int rightMotor, int clockwise);
 void goStraight(int leftMotor, int rightMotor, int millisecond_t, int powerLevel);
 void goStraightMrp(int leftMotor, int rightMotor, int velocity, int numberOfTicks);

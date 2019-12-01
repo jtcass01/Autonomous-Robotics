@@ -47,14 +47,22 @@ void SpinForIRReadings(int *readingArray, int numberOfReadings) {
   }
 }
 
-void SpinUntilIRReading(int goalValue) {
+void SpinUntilIRReading(int goalValue, int min) {
   int frontReading = analog(A_FRONT_IR);
 
   printf("Spinning until reading of %d is found.\n", goalValue);
-  while(frontReading < goalValue) {
-    frontReading = analog(A_FRONT_IR);
-    printf("IR Reading %d | goal value %d\n", frontReading, goalValue);
-    goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 3, -800, 800);
+  if (min) {
+    while(frontReading > goalValue) {
+      frontReading = analog(A_FRONT_IR);
+      printf("IR Reading %d | goal value %d\n", frontReading, goalValue);
+      goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 3, -800, 800);
+    }
+  } else {
+    while(frontReading < goalValue) {
+      frontReading = analog(A_FRONT_IR);
+      printf("IR Reading %d | goal value %d\n", frontReading, goalValue);
+      goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 3, -800, 800);
+    }
   }
 }
 
@@ -107,7 +115,7 @@ void turnRight(int leftMotor, int rightMotor) {
 
 void reverseLeftTurn(int leftMotor, int rightMotor) {
   // Turn left
-  make90Turn(leftMotor, rightMotor, 0, -750);
+  make90Turn(leftMotor, rightMotor, 0, -755);
 }
 
 void reverseRightTurn(int leftMotor, int rightMotor) {

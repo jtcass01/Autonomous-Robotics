@@ -14,9 +14,8 @@
 
 // Servo Motors
 #define LASSO_SERVO                           0
-#define LASSO_DOWN_ENCODER                    500
+#define LASSO_DOWN_ENCODER                    550
 #define LASSO_UP_ENCODER                      1550
-#define LASSO_START_ENCODER					          600
 
 // Motors
 #define LEFT_MOTOR                            0
@@ -24,16 +23,17 @@
 
 /// Front IR
 #define A_FRONT_IR                        0
-#define A_FRONT_IR_WHITE_MIN              286
-#define A_FRONT_IR_WHITE_MAX              2828
-#define A_FRONT_IR_BLACK_MIN              155
-#define A_FRONT_IR_BLACK_MAX              215
-#define NUM_IR_SPIN_READINGS              50
+#define NUM_IR_SPIN_READINGS              205
 
 // Digital Inputs
-#define D_BACK_BUTTON                         0
-#define D_FRONT_LEFT_BUTTON                   1
-#define D_FRONT_RIGHT_BUTTON                  2
+#define D_FRONT_LEFT_BUTTON                   0
+#define D_FRONT_RIGHT_BUTTON                  1
+#define D_BACK_LEFT_BUTTON                    2
+#define D_BACK_RIGHT_BUTTON                   3
+
+// field Constants
+#define WHITE_THRESHOLD                       170
+#define BLACK_THRESHOLD                       3200
 
 // Testing Constants
 #define TEST_DATA_ARRAY_SIZE		              151

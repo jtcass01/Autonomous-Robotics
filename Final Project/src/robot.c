@@ -50,8 +50,8 @@ void DriveThread(void) {
         printf("ROBOT_STATE_READING_QR\n");
 
         // Go straightfor .5s
-        printf("Drive straight for 1.75s\n");
-        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 2000, 1000, 1000);
+        printf("Drive straight for 0.2s\n");
+        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, 1000, 1000);
 
         // Make a left turn
         printf("Making a left turn.\n");
@@ -59,22 +59,16 @@ void DriveThread(void) {
 
         // Go straight until the buttons are pressed
         printf("Going straight until buttons are pressed.\n");
-        while(!gv_dealingWithButton) {
-          goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 1000, 1000);
+        while(!gv_dealingWithFrontButton) {
+          goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 50, 1000, 1000);
         }
         ao();
 
-        printf("Backing up for 1s.\n");
-        // back up for 1 second
-        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 1000, -1000, -1000);
-
-        printf("Turning left.\n");
+        printf("Performing reverseLeftTurn.\n");
         // Turn left
-        turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
+        reverseLeftTurn(LEFT_MOTOR, RIGHT_MOTOR);
 
-        // go straight for 1 second
-        printf("going straight for 1.2 second\n");
-        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 1200, 1000, 1000);
+        printf("Attempting to read QR code\n");
 
         // Read QR code
         while(gv_objectColor == OBJECT_COLOR_INVALID) {
@@ -82,7 +76,8 @@ void DriveThread(void) {
           ao();
 
           // spend 3.5 seconds looking for QR code
-          while(time_passed < 3.5) {
+          while(time_passed < 6) {
+            wait_for_milliseconds(100);
             camera_update();
 
             if (get_object_count(QR_CHANNEL_NUMBER) > 0) {
@@ -104,23 +99,20 @@ void DriveThread(void) {
               }
             } else {
               printf("No QR Code found.\n");
-              if (time_passed < 0.6) {
+              if (time_passed < 1.5) {
                 // pan right
-                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 100, -100);
-              } else if (time_passed < 1.8) {
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 150, -150);
+              } else if (time_passed < 4) {
                 // pan left
-                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, -100, 100);
-              } else if (time_passed < 2.4) {
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, -150, 150);
+              } else if (time_passed < 6) {
                 // pan back center
-                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 100, -100);
-              } else {
-                ao();
+                goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 150, -150);
               }
             }
-            wait_for_milliseconds(100);
             time_passed += 0.1;
           }
-
+          ao();
           time_passed = 0;
 
           if (gv_objectColor == OBJECT_COLOR_INVALID) {
@@ -188,9 +180,25 @@ void DriveThread(void) {
           printf("Object found.\n");
           ao();
           gv_robotState = ROBOT_STATE_APPROACHING_OBJECT;
+          time_passed = 0;
         } else {
-          printf("Roaming. Performing circle until object is found");
-          goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, -1000, 1000);
+          if (time_passed < 6 ) {
+              printf("Roaming. Performing circle until object is found\n");
+              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, -1000, 1000);
+              time_passed += 0.1;
+          } else {
+              printf("Too much circle talk.  Driving forward until button is pressed.\n");
+              time_passed = 0;
+
+              while(!gv_dealingWithFrontButton) {
+		              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, 1000, 1000);
+              }
+
+              printf("Driving backwards for 2s\n");
+              goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 2000, -1000, -1000);
+              printf("spin180 CW\n");
+              spin180(LEFT_MOTOR, RIGHT_MOTOR, 1);
+          }
         }
         break;
       case ROBOT_STATE_APPROACHING_OBJECT:
@@ -221,13 +229,45 @@ void DriveThread(void) {
             demoMotor(LEFT_MOTOR, RIGHT_MOTOR, leftMotorPower, rightMotorPower);
           }
         }
+
+        if (gv_homeBase == HOME_BASE_WHITE) {
+          printf("Inside white home base.  Leaving Base.\n");
+          if (analog(A_FRONT_IR) < WHITE_THRESHOLD) {
+            gv_robotState = ROBOT_STATE_LEAVING_BASE;
+          }
+        } else {
+          printf("Inside black home base.  Leaving Base.\n");
+          if (analog(A_FRONT_IR) > BLACK_THRESHOLD) {
+            gv_robotState = ROBOT_STATE_LEAVING_BASE;
+          }
+        }
+
         break;
       case ROBOT_STATE_APPROACHING_GOAL:
         printf("ROBOT_STATE_APPROACHING_GOAL\n");
         // spinning for IR Readings
         SpinForIRReadings(IRSpinReadings, NUM_IR_SPIN_READINGS);
         BubbleSort(IRSpinReadings, NUM_IR_SPIN_READINGS);
-        SpinUntilIRReading(IRSpinReadings[NUM_IR_SPIN_READINGS-3]);
+
+        while ( IRSpinReadings[NUM_IR_SPIN_READINGS-1] - IRSpinReadings[0] > 1100 ) {
+          printf("Near center Line.\n");
+
+          if (gv_homeBase == HOME_BASE_WHITE) {
+            printf("Home base White. Heading towards darker side then respinning.\n");
+            SpinUntilIRReading(IRSpinReadings[ (int) (NUM_IR_SPIN_READINGS / 2)], 0);
+          } else {
+            printf("Home base black. Heading towards lighter side then respinning.\n");
+            SpinUntilIRReading(IRSpinReadings[ (int) (NUM_IR_SPIN_READINGS / 2)], 1);
+          }
+
+          printf("Driving forward 0.5s\n");
+          goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 700, 1000, 1000);
+
+          printf("Respinning for readings.\n");
+          SpinForIRReadings(IRSpinReadings, NUM_IR_SPIN_READINGS);
+        }
+
+        SpinUntilIRReading(IRSpinReadings[NUM_IR_SPIN_READINGS-2], 0);
         ao();
         if (gv_homeBase == HOME_BASE_WHITE) {
           printf("On white side.  Spinning 180 CW.\n");
@@ -238,11 +278,16 @@ void DriveThread(void) {
         goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 200, -1000, 1000);
 
         printf("Driving backwards until button is pressed.\n");
-        while( digital(D_BACK_BUTTON) != 1 ) {
+        while( !gv_dealingWithBackButton ) {
           goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 100, -1000, -1000);
         }
-        printf("Driving forwards for 1.2 second\n");
-        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 1200, 1000, 1000);
+
+        // turn a lil left for good measure
+        printf("turning a lil left for good measure.\n");
+        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 10, 100, 1000);
+
+        printf("Driving forwards for 0.9 second\n");
+        goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 900, 1000, 1000);
 
         printf("Performing reverse left turn\n");
         reverseLeftTurn(LEFT_MOTOR, RIGHT_MOTOR);
@@ -251,10 +296,25 @@ void DriveThread(void) {
         gv_lassoState = LASSO_STATE_UP;
 
         // Drive forward until a button is pressed
-        while(!gv_dealingWithButton) {
+        while(!gv_dealingWithFrontButton) {
           goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 50, 1000, 1000);
         }
 
+
+        if (gv_homeBase == HOME_BASE_WHITE) {
+          if (analog(A_FRONT_IR) > WHITE_THRESHOLD) {
+            printf("Not inside home base.  Backing up with block and respinning.\n");
+          }
+        } else {
+          if (analog(A_FRONT_IR) < BLACK_THRESHOLD) {
+            printf("Not inside home base.  Backing up with block and respinning.\n");
+          }
+        }
+
+        gv_robotState = ROBOT_STATE_LEAVING_BASE;
+        break;
+      case ROBOT_STATE_LEAVING_BASE:
+        printf("ROBOT_STATE_LEAVING_BASE\n");
         printf("Driving backwards for 4s\n");
         goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 4000, -1000, -1000);
 
@@ -265,9 +325,6 @@ void DriveThread(void) {
         turnLeft(LEFT_MOTOR, RIGHT_MOTOR);
 
         gv_robotState = ROBOT_STATE_SEARCHING_FOR_OBJECT;
-        break;
-      case ROBOT_STATE_PLACING_OBJECT:
-        printf("ROBOT_STATE_PLACING_OBJECT\n");
         break;
       case ROBOT_STATE_INVALID:
         printf("ROBOT_STATE_INVALID\n");
@@ -281,38 +338,33 @@ void DriveThread(void) {
 void ButtonThread(void) {
   int frontLeftButtonReading = 0;
   int frontRightButtonReading = 0;
-  int firstPress = 0;
+  int backLeftButtonReading = 0;
+  int backRightButtonReading = 0;
 
   while(1) {
     // get sensor readings
     frontLeftButtonReading = digital(D_FRONT_LEFT_BUTTON);
     frontRightButtonReading = digital(D_FRONT_RIGHT_BUTTON);
+    backLeftButtonReading = digital(D_BACK_LEFT_BUTTON);
+    backRightButtonReading = digital(D_BACK_RIGHT_BUTTON);
 
-    if (gv_robotState == ROBOT_STATE_READING_QR) {
-      if ((frontLeftButtonReading || frontRightButtonReading) && firstPress == 0) {
-        gv_dealingWithButton = 1;
-        firstPress += 1;
-        wait_for_milliseconds(1000);
-        gv_dealingWithButton = 0;
-      }
-    } else {
-      if (frontLeftButtonReading && frontRightButtonReading) {
-        gv_dealingWithButton = 1;
-        wait_for_milliseconds(1000);
-        gv_dealingWithButton = 0;
-      } else if (frontLeftButtonReading) {
-        gv_dealingWithButton = 1;
-        wait_for_milliseconds(1000);
-        gv_dealingWithButton = 0;
-      } else if (frontRightButtonReading) {
-        gv_dealingWithButton = 1;
-        wait_for_milliseconds(1000);
-        gv_dealingWithButton = 0;
-      }
+    if (frontLeftButtonReading || frontRightButtonReading) {
+      gv_dealingWithFrontButton = 1;
+      wait_for_milliseconds(1000);
+      gv_dealingWithFrontButton = 0;
     }
-    wait_for_milliseconds(1000);
+
+    if (backLeftButtonReading || backRightButtonReading) {
+      gv_dealingWithBackButton = 1;
+      wait_for_milliseconds(1000);
+      gv_dealingWithBackButton = 0;
+    }
+
+    wait_for_milliseconds(100);
   }
 }
+
+
 
 
 int UpdateMotorPowers_TrackObject(int *leftMotorPower, int *rightMotorPower) {

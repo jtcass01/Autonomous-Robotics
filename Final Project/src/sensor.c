@@ -70,21 +70,6 @@ void ReportIRSensors(void) {
   printData("front ir", frontReadings, TEST_DATA_ARRAY_SIZE);
 }
 
-void ReportNormalizedIRSensors(void) {
-  int frontReading = 0;
-
-  while(1) {
-    if(gv_homeBase == HOME_BASE_WHITE) {
-      frontReading = NormalizeSensorReading(analog(A_FRONT_IR), A_FRONT_IR_WHITE_MIN, A_FRONT_IR_WHITE_MAX);
-    } else if (gv_homeBase == HOME_BASE_BLACK) {
-      frontReading = NormalizeSensorReading(analog(A_FRONT_IR), A_FRONT_IR_BLACK_MIN, A_FRONT_IR_BLACK_MAX);
-    }
-
-    printf("front ir: %d\n", frontReading);
-    wait_for_milliseconds(100);
-  }
-}
-
 int ConvertFrontSonarReadingToCM(int sensorReading) {
   int result = (int) (((float) sensorReading - 42.0747619) / 2.96188645);
 
