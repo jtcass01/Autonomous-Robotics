@@ -16,7 +16,6 @@ typedef enum {
   LASSO_STATE_INVALID = 0,
   LASSO_STATE_DOWN = 1,
   LASSO_STATE_UP = 2,
-  LASSO_STATE_WAITING = 3
 } LASSO_STATE;
 
 typedef enum {

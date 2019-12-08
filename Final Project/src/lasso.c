@@ -6,9 +6,8 @@ void LassoThread(void) {
       MoveLasso(LASSO_DOWN_ENCODER);
     } else if ( gv_lassoState == LASSO_STATE_UP ) {
       MoveLasso(LASSO_UP_ENCODER);
-    } else {
-      wait_for_milliseconds(200);
     }
+    wait_for_milliseconds(200);
   }
 }
 

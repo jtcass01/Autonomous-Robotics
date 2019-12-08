@@ -229,19 +229,6 @@ void DriveThread(void) {
             demoMotor(LEFT_MOTOR, RIGHT_MOTOR, leftMotorPower, rightMotorPower);
           }
         }
-
-        if (gv_homeBase == HOME_BASE_WHITE) {
-          printf("Inside white home base.  Leaving Base.\n");
-          if (analog(A_FRONT_IR) < WHITE_THRESHOLD) {
-            gv_robotState = ROBOT_STATE_LEAVING_BASE;
-          }
-        } else {
-          printf("Inside black home base.  Leaving Base.\n");
-          if (analog(A_FRONT_IR) > BLACK_THRESHOLD) {
-            gv_robotState = ROBOT_STATE_LEAVING_BASE;
-          }
-        }
-
         break;
       case ROBOT_STATE_APPROACHING_GOAL:
         printf("ROBOT_STATE_APPROACHING_GOAL\n");
@@ -300,16 +287,6 @@ void DriveThread(void) {
           goDemobotMav(LEFT_MOTOR, RIGHT_MOTOR, 50, 1000, 1000);
         }
 
-
-        if (gv_homeBase == HOME_BASE_WHITE) {
-          if (analog(A_FRONT_IR) > WHITE_THRESHOLD) {
-            printf("Not inside home base.  Backing up with block and respinning.\n");
-          }
-        } else {
-          if (analog(A_FRONT_IR) < BLACK_THRESHOLD) {
-            printf("Not inside home base.  Backing up with block and respinning.\n");
-          }
-        }
 
         gv_robotState = ROBOT_STATE_LEAVING_BASE;
         break;
